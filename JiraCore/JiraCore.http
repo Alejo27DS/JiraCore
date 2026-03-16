@@ -1,0 +1,6 @@
+@JiraCore_HostAddress = http://localhost:5062
+
+GET {{JiraCore_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
