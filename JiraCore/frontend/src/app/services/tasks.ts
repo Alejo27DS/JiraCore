@@ -7,7 +7,7 @@ import { Injectable } from "@angular/core";
 export class TasksService {
 
   private apiUrl =
-    "http://localhost:5001/api/tasks";
+    "http://localhost:4200/api/tasks";
 
   constructor(private http: HttpClient) { }
 
