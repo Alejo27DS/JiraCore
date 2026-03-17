@@ -17,9 +17,9 @@ builder.Services.AddCors(options =>
         });
 });
 
-app.UseCors("Angular");
-
 var app = builder.Build();
+
+app.UseCors("Angular");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
