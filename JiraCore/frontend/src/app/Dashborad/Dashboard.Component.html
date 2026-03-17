@@ -1,0 +1,49 @@
+<!-- Usamos las clases CSS que definimos antes -->
+<div class="wireframe-container">
+  <!-- Sidebar (puedes ponerlo en un layout aparte, aquí está simplificado) -->
+  <div class="sidebar">...</div>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <h3>Panel Principal</h3>
+    </div>
+
+    <!-- AQUÍ ESTÁ LA MAGIA: Mostramos los datos del backend -->
+    <div class="grid-4">
+      <!-- En lugar de escribir <h1>142</h1>, preguntamos por stats.EmpleadosActivos -->
+      <div class="card-solid" style="text-align: center;">
+        <h1>{{ stats?.EmpleadosActivos }}</h1>
+        <p>Empleados Activos</p>
+      </div>
+
+      <div class="card-solid" style="text-align: center;">
+        <h1>{{ stats?.SolicitudesPendientes }}</h1>
+        <p>Solicitudes Pendientes</p>
+      </div>
+
+      <div class="card-solid" style="text-align: center;">
+        <h1>{{ stats?.Jubilaciones }}</h1>
+        <p>Jubilaciones</p>
+      </div>
+
+      <div class="card-solid" style="text-align: center;">
+        <h1>{{ stats?.NominaLista }}</h1>
+        <p>Nómina Lista</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 20px;">
+      <div class="card">
+        <strong>Actividad Reciente</strong>
+
+        <!-- Usamos *ngFor para repetir filas según los datos que vengan del API -->
+        <div *ngFor="let act of activities" class="table-row">
+          <span class="col">{{ act.Desc }}</span>
+          <span class="col" [style.color]="act.Color">{{ act.Status }}</span>
+        </div>
+
+      </div>
+      <!-- ... resto del wireframe ... -->
+    </div>
+  </div>
+</div>
