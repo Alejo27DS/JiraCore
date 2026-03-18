@@ -1,35 +1,33 @@
-<div class="wireframe-container">
+<div class="wireframe-container" style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; width: 100% !important; height: 100vh !important; min-width: 1000px !important; border: 4px solid black; background: white;">
 
-  <!-- BARRA LATERAL (SIDEBAR) -->
-  <div class="sidebar">
+  <!-- SIDEBAR: SOLO se muestra si isLoggedIn es TRUE -->
+  <div class="sidebar" *ngIf="isLoggedIn">
     <div class="sidebar-header">BPM SYSTEM</div>
-
-    <!-- Aquí van los links de navegación -->
-    <a routerLink="" class="menu-item">Panel Principal</a>
-    <a routerLink="empleados" class="menu-item">Empleados</a>
-    <a routerLink="solicitudes" class="menu-item">Solicitudes</a>
-    <a routerLink="jubilacion" class="menu-item">Jubilación</a>
-    <a routerLink="sst" class="menu-item">Citas SST</a>
-    <a routerLink="nomina" class="menu-item">Nómina</a>
-    <a routerLink="notificaciones" class="menu-item">Alertas</a>
-    <a routerLink="admin" class="menu-item">Administración</a>
-    <a routerLink="reportes" class="menu-item">Informes</a>
+    <a routerLink="dashboard" routerLinkActive="active" class="menu-item">Panel Principal</a>
+    <a routerLink="empleados" routerLinkActive="active" class="menu-item">Empleados</a>
+    <a routerLink="solicitudes" routerLinkActive="active" class="menu-item">Solicitudes</a>
+    <a routerLink="jubilacion" routerLinkActive="active" class="menu-item">Jubilación</a>
+    <a routerLink="sst" routerLinkActive="active" class="menu-item">Citas SST</a>
+    <a routerLink="nomina" routerLinkActive="active" class="menu-item">Nómina</a>
+    <a routerLink="notificaciones" routerLinkActive="active" class="menu-item">Alertas</a>
+    <a routerLink="admin" routerLinkActive="active" class="menu-item">Administración</a>
+    <a routerLink="reportes" routerLinkActive="active" class="menu-item">Informes</a>
 
     <div style="margin-top: auto; padding: 20px;">
       <a routerLink="login" class="btn" style="width:100%; text-align:center; display:block;">Cerrar Sesión</a>
     </div>
   </div>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- MAIN CONTENT: SIEMPRE VISIBLE (Sin *ngIf) -->
   <div class="main-content">
 
-    <!-- BARRA SUPERIOR -->
-    <div class="top-bar">
+    <!-- TOP BAR: SOLO se muestra si isLoggedIn es TRUE -->
+    <div class="top-bar" *ngIf="isLoggedIn">
       <h3>Bienvenido</h3>
       <div style="font-size: 12px;">Usuario: Admin</div>
     </div>
 
-    <!-- ESTE ES EL HUECO MÁGICO: Aquí cargará Login, Dashboard, Empleados, etc. -->
+    <!-- ROUTER OUTLET: SIEMPRE VISIBLE. Aquí carga el Login o el Dashboard -->
     <router-outlet></router-outlet>
 
   </div>

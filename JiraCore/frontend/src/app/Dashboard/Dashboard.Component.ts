@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../services/Dashborad';
+import { Component, OnInit} from '@angular/core';
+import { DashboardService } from '../services/Dashboard';
 
 @Component({
   selector: 'app-dashboard',

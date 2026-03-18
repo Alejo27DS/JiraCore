@@ -1,49 +1,120 @@
-<!-- Usamos las clases CSS que definimos antes -->
-<div class="wireframe-container">
-  <!-- Sidebar (puedes ponerlo en un layout aparte, aquí está simplificado) -->
-  <div class="sidebar">...</div>
+<div class="login-container">
+  <img src="../../assets/Logo-BPM-Color.png" alt="Logo" class="login-logo" style="max-width:300px; width:200%; height:auto;" />
+  <!-- ngSubmit ejecuta la función en tu archivo .ts al dar clic en ingresar -->
+  <form (ngSubmit)="onLogin()" class="login-form">
 
-  <div class="main-content">
-    <div class="top-bar">
-      <h3>Panel Principal</h3>
+    <label for="Email">Usuario</label>
+    <!-- [(ngModel)] conecta el input con una variable en tu .ts -->
+    <input [(ngModel)]="email" name="email" class="login-input" placeholder="usuario@bpm.com" autocomplete="username" />
+
+    <label for="Password">Contraseña</label>
+    <input [(ngModel)]="password" name="password" type="password" class="login-input" placeholder="••••••••" autocomplete="current-password" />
+
+    <div class="login-options">
+      <label><input [(ngModel)]="rememberMe" name="rememberMe" type="checkbox" /> Recordarme</label>
+      <a href="#" class="forgot-link">¿Olvidó clave?</a>
     </div>
 
-    <!-- AQUÍ ESTÁ LA MAGIA: Mostramos los datos del backend -->
-    <div class="grid-4">
-      <!-- En lugar de escribir <h1>142</h1>, preguntamos por stats.EmpleadosActivos -->
-      <div class="card-solid" style="text-align: center;">
-        <h1>{{ stats?.EmpleadosActivos }}</h1>
-        <p>Empleados Activos</p>
-      </div>
-
-      <div class="card-solid" style="text-align: center;">
-        <h1>{{ stats?.SolicitudesPendientes }}</h1>
-        <p>Solicitudes Pendientes</p>
-      </div>
-
-      <div class="card-solid" style="text-align: center;">
-        <h1>{{ stats?.Jubilaciones }}</h1>
-        <p>Jubilaciones</p>
-      </div>
-
-      <div class="card-solid" style="text-align: center;">
-        <h1>{{ stats?.NominaLista }}</h1>
-        <p>El que lo lea es gei</p>
-      </div>
-    </div>
-
-    <div class="grid-2" style="margin-top: 20px;">
-      <div class="card">
-        <strong>Actividad Multitarea Reciente</strong>
-
-        <!-- Usamos *ngFor para repetir filas según los datos que vengan del API -->
-        <div *ngFor="let act of activities" class="table-row">
-          <span class="col">{{ act.Desc }}</span>
-          <span class="col" [style.color]="act.Color">{{ act.Status }}</span>
-        </div>
-
-      </div>
-      <!-- ... resto del wireframe ... -->
-    </div>
-  </div>
+    <button type="submit" class="login-btn">INGRESAR</button>
+  </form>
 </div>
+
+<!-- Tus estilos los dejamos aquí por ahora para que funcione rápido -->
+<style>
+  body {
+    background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-container {
+    max-width: 370px;
+    margin: 40px auto;
+    padding: 38px 32px 32px 32px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
+    text-align: center;
+    border: 1.5px solid #2563eb;
+  }
+
+  .login-logo {
+    width: 90px;
+    margin-bottom: 14px;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+  }
+
+    .login-form label {
+      font-size: 1em;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+  .login-input {
+    padding: 12px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 1em;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
+  }
+
+    .login-input:focus {
+      border: 1.5px solid #2563eb;
+      box-shadow: 0 0 0 2px #dbeafe;
+      background: #fff;
+    }
+
+  .login-btn {
+    background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 0;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+  }
+
+    .login-btn:hover {
+      background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 4px 16px rgba(37,99,235,0.15);
+    }
+
+  .login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.98em;
+    margin-bottom: 8px;
+  }
+
+  .forgot-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+    .forgot-link:hover {
+      color: #1e40af;
+      text-decoration: underline;
+    }
+</style>

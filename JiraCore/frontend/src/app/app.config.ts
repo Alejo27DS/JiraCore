@@ -1,14 +1,10 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http'; // IMPORTAR ESTO
+import { routes } from './app.routes'; // Asegúrate que app.routes.ts esté en esa carpeta
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideHttpClient(), // AGREGAR ESTO
-    provideRouter(routes),
-    provideClientHydration(withEventReplay())
+    // Esta línea es la que le da vida al Router y soluciona tu error
+    provideRouter(routes)
   ]
 };
