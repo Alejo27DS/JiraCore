@@ -1,34 +1,38 @@
-import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../services/Login';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [NgFor], // Importamos NgFor para usarlo en el HTML]
-  templateUrl: './login.component.html',
-
+  imports: [CommonModule, FormsModule],
+  templateUrl: './Login.Component.html'
+  // styleUrls eliminados para evitar errores
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
+  // Variables vacías al inicio
+  email = '';
+  password = '';
+  rememberMe = false;
 
-  // Variables para guardar los datos que vienen del Backend
-  stats: any;
-  activities: any[] = [];
+  // Inyectamos el Router
+  constructor(private router: Router) { }
 
-  constructor(private LoginService: LoginService) { }
+  // Función que se ejecuta al dar clic en el botón
+  onLogin() {
+    console.log('Intentando login con:', this.email);
 
-  ngOnInit(): void {
-    this.cargarDatos();
-  }
-
-  cargarDatos() {
-    // Llamamos al API
-    this.LoginService.getStats().subscribe(data => {
-      this.stats = data; // Guardamos los datos en la variable
-    });
-
-    this.LoginService.getActivity().subscribe(data => {
-      this.activities = data;
-    });
+    if (this.email && this.password) {
+      // Verificamos si estamos en el navegador
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('isLoggedIn', 'true');
+      }
+      this.router.navigate(['/app.html']);
+    }
+    else {
+      alert("Porfavor ingresa usuario y contraseña")
+    }
   }
 }
+

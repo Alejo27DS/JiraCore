@@ -1,12 +1,24 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, RouterLink, NgIf],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class AppComponent {
+  title = 'bpm-wireframe';
+  isLoggedIn: boolean = false;
+
+  constructor() {
+    if (typeof window !== 'undefined') {  
+      this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
+      window.addEventListener('storage', () => {
+        this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
+      });
+    }
+  }
 }
