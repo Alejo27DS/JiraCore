@@ -28,7 +28,7 @@ export class LoginComponent {
       if (typeof window !== 'undefined') {
         localStorage.setItem('isLoggedIn', 'true');
       }
-      this.router.navigate(['/app.html']);
+      this.router.navigate(['/dashboard']);
     }
     else {
       alert("Porfavor ingresa usuario y contraseña")
