@@ -292,9 +292,17 @@ h2 {
     margin-bottom: 14px;
   }
 
+  nomina-gird {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px;
+    margin-top: 30px;
+  }
+
   .grid-2, .grid-3, .grid-4 {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(3,1fr);
+    gap: 40px;
+    margin-top: 30px
   }
 }
 /* You can add global styles to this file, and also import other style files */
