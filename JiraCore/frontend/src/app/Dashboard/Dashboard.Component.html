@@ -1,18 +1,23 @@
 <div class="inicio-container">
   <h2>Bienvenido a BPM Consulting</h2>
+
   <p class="inicio-mensaje">
     Esta es la plataforma de gestión integral para tu organización.<br>
     Utiliza el menú lateral para acceder a los diferentes módulos del sistema.<br>
     Si necesitas ayuda, consulta la sección de soporte o contacta al administrador.
   </p>
+
   <div class="inicio-info">
     <div>
       <h3>Último acceso:</h3>
-      <p>@DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm")</p>
+      <!-- Usamos la pipe 'date' para formatear la fecha -->
+      <!-- 'EEEE, dd MMMM yyyy HH:mm' es el formato: Lunes, 20 Marzo 2026 15:30 -->
+      <p>{{ fechaActual | date:'EEEE, dd MMMM yyyy HH:mm' }}</p>
     </div>
     <div>
       <h3>Usuario actual:</h3>
-      <p>@User.Identity.Name ?? "Invitado"</p>
+      <!-- Si no hay usuario, muestra "Invitado" -->
+      <p>{{ usuarioActual || "Invitado" }}</p>
     </div>
   </div>
 </div>

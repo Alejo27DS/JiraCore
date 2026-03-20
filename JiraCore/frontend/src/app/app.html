@@ -7,11 +7,10 @@
     <a routerLink="dashboard" routerLinkActive="active" class="menu-item">Dashboard</a>
     <a routerLink="nomina" routerLinkActive="active" class="menu-item">Nomina</a>
     <a routerLink="solicitudes" routerLinkActive="active" class="menu-item">Solicitudes</a>
-    <a routerLink="jubilacion" routerLinkActive="active" class="menu-item">Jubilación</a>
+    <a routerLink="retiro" routerLinkActive="active" class="menu-item">Retiro</a>
+    <a routerLink="cambiocampaña" routerLinkActive="active" class="menu-item">Cambio de Campaña</a>
     <a routerLink="sst" routerLinkActive="active" class="menu-item">Citas SST</a>
-    <a routerLink="notificaciones" routerLinkActive="active" class="menu-item">Alertas</a>
-    <a routerLink="admin" routerLinkActive="active" class="menu-item">Administración</a>
-    <a routerLink="reportes" routerLinkActive="active" class="menu-item">Informes</a>
+    <a routerLink="seguridad" routerLinkActive="active" class="menu-item">Seguridad y Salud</a>
 
     <div style="margin-top: auto; padding: 20px;">
       <a (click)="logout()" class="btn" style="width:100%; text-align:center; display:block;">Cerrar Sesión</a>
@@ -24,6 +23,7 @@
     <!-- TOP BAR: SOLO se muestra si isLoggedIn es TRUE -->
     <div class="top-bar" *ngIf="isLoggedIn">
       <h3>Bienvenido</h3>
+      <a routerLink="notificaciones" routerLinkActive="active" class="menu-item">Alertas</a>
       <div style="font-size: 12px;">Usuario: Admin</div>
     </div>
 

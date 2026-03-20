@@ -1,0 +1,88 @@
+
+.solicitud-personal-container {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 36px 32px 28px 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
+  border: 1.5px solid #2563eb;
+}
+
+  .solicitud-personal-container h2 {
+    text-align: center;
+    color: #2563eb;
+    margin-bottom: 24px;
+    font-size: 1.5em;
+    letter-spacing: 1px;
+  }
+
+.solicitud-personal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+  .solicitud-personal-form label {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+    font-size: 1em;
+  }
+
+  .solicitud-personal-form input,
+  .solicitud-personal-form select,
+  .solicitud-personal-form textarea {
+    padding: 12px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 1em;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+    .solicitud-personal-form input:focus,
+    .solicitud-personal-form select:focus,
+    .solicitud-personal-form textarea:focus {
+      border: 1.5px solid #2563eb;
+      box-shadow: 0 0 0 2px #dbeafe;
+      background: #fff;
+    }
+
+    .solicitud-personal-form input[type="file"] {
+      padding: 8px 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+  .solicitud-personal-form button {
+    background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 0;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+  }
+
+    .solicitud-personal-form button:hover {
+      background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 4px 16px rgba(37,99,235,0.15);
+    }
+
+
+.solicitud-personal-container {
+  padding: 18px 4vw 18px 4vw;
+  max-width: 98vw;
+}
+
+  .solicitud-personal-container h2 {
+    font-size: 1.1em;
+  }

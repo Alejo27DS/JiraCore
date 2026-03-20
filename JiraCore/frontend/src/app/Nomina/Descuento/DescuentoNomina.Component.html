@@ -1,0 +1,85 @@
+<div class="ajuste-nomina-container">
+  <h2>Descuento de nómina</h2>
+
+  <!-- (ngSubmit) maneja el envío, #descuentoForm permite validar -->
+  <form (ngSubmit)="guardarDescuento()" #descuentoForm="ngForm" class="solicitud-personal-form">
+
+    <label for="generador">Generar esta solicitud en nombre de:</label>
+    <select id="generador" name="generador" [(ngModel)]="descuento.generador" required>
+      <option value="">Seleccione...</option>
+      <option value="pepito perez">Pepito</option>
+      <option value="juan">Juan</option>
+      <option value="laura">Laura</option>
+      <option value="sofia">Sofia</option>
+    </select>
+
+    <label for="resumen">Resumen:</label>
+    <input type="text" id="resumen" name="resumen" [(ngModel)]="descuento.resumen" required />
+
+    <label for="cedula">Cédula:</label>
+    <input type="text" id="cedula" name="cedula" [(ngModel)]="descuento.cedula" required />
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" [(ngModel)]="descuento.nombre" required />
+
+    <label for="cargo">Cargo:</label>
+    <select id="cargo" name="cargo" [(ngModel)]="descuento.cargo" required>
+      <option value="">Seleccione...</option>
+      <option value="Ventas">Ventas</option>
+      <option value="Soporte">Soporte</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Finanzas">Finanzas</option>
+      <option value="Otra">Otra</option>
+    </select>
+
+    <label for="campanaArea">Campaña o Áreas:</label>
+    <select id="campanaArea" name="campanaArea" [(ngModel)]="descuento.campanaArea">
+      <option value="" disabled selected>Seleccione una opción...</option>
+      <option value="Anla">Anla</option>
+      <option value="Ant">Ant</option>
+      <option value="ARN">ARN</option>
+      <option value="Banco de La Republica">Banco de La Republica</option>
+      <option value="Dissan Ibagué">Dissan Ibagué</option>
+      <option value="Dissan Risaralda">Dissan Risaralda</option>
+      <option value="Fedex">Fedex</option>
+      <option value="Feel">Feel</option>
+      <option value="Gerencia Control y Mejora">Gerencia Control y Mejora</option>
+      <option value="Gerencia Financiera y Administrativa">Gerencia Financiera y Administrativa</option>
+      <option value="Gerencia General">Gerencia General</option>
+      <option value="Gerencia Operaciones">Gerencia Operaciones</option>
+      <option value="Gerencia Recursos Humanos">Gerencia Recursos Humanos</option>
+      <option value="Gerencia Tecnologia">Gerencia Tecnologia</option>
+      <option value="Minigualdad">Minigualdad</option>
+      <option value="Ministerio del interior">Ministerio del interior</option>
+      <option value="Movilidad">Movilidad</option>
+      <option value="Opain">Opain</option>
+      <option value="Preppas">Preppas</option>
+      <option value="Rubicón">Rubicón</option>
+      <option value="Sanida Costa">Sanida Costa</option>
+      <option value="SIC">SIC</option>
+      <option value="Supersociedades empresarial">Supersociedades empresarial</option>
+      <option value="Uariv">Uariv</option>
+      <option value="Universidad Militar">Universidad Militar</option>
+    </select>
+
+    <label for="valorDescuento">Valor del descuento:</label>
+    <!-- Cambié a type="number" para validación numérica -->
+    <input type="number" id="valorDescuento" name="valorDescuento" [(ngModel)]="descuento.valorDescuento" required />
+
+    <label for="documento">Adjuntar la autorización de descuento:</label>
+    <!-- Usamos (change) para capturar el archivo seleccionado -->
+    <input type="file" id="documento" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.jpg,.png" required />
+
+    <label for="descripcion">Descripción:</label>
+    <input type="text" id="descripcion" name="descripcion" [(ngModel)]="descuento.descripcion" required />
+
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+      <!-- Botón GUARDAR -->
+      <button type="submit" class="btn btn-primary" [disabled]="descuentoForm.invalid">Guardar</button>
+
+      <!-- Botón CANCELAR -->
+      <button type="button" (click)="cancelar()" class="btn btn-warning">Cancelar</button>
+    </div>
+
+  </form>
+</div>

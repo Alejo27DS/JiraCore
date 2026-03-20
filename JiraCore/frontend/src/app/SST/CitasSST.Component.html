@@ -1,0 +1,59 @@
+<div class="solicitud-personal-container">
+  <h2>Agendar Cita</h2>
+
+  <!-- FORMULARIO -->
+  <form (ngSubmit)="agendarCita()" #citaForm="ngForm" class="solicitud-personal-form">
+
+    <label>Nombre del paciente:</label>
+    <input type="text" name="NombrePaciente" [(ngModel)]="nuevaCita.nombrePaciente" required />
+
+    <label>Email:</label>
+    <input type="email" name="Email" [(ngModel)]="nuevaCita.email" required />
+
+    <label>Fecha y hora:</label>
+    <input type="datetime-local" name="Fecha" [(ngModel)]="nuevaCita.fecha" required />
+
+    <label>Motivo de la consulta:</label>
+    <textarea name="Motivo" [(ngModel)]="nuevaCita.motivo" rows="3" required></textarea>
+
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+      <button type="submit" class="btn btn-primary" [disabled]="citaForm.invalid">Agendar cita</button>
+      <button type="button" (click)="cancelar()" class="btn btn-warning">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<div class="solicitud-personal-container" style="margin-top: 40px;">
+  <h2>Citas Agendadas</h2>
+
+  <table class="table" style="width:100%; border-collapse:collapse; border: 1px solid #ddd;">
+    <thead>
+      <tr style="background:#2563eb; color:#fff;">
+        <th style="padding: 10px;">Paciente</th>
+        <th style="padding: 10px;">Email</th>
+        <th style="padding: 10px;">Fecha</th>
+        <th style="padding: 10px;">Motivo</th>
+        <th style="padding: 10px;">Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Usamos *ngFor para recorrer la lista -->
+      <tr *ngFor="let cita of citasAgendadas">
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ cita.nombrePaciente }}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ cita.email }}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ cita.fecha | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ cita.motivo }}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">
+          <span class="badge" [style.background-color]="cita.estado === 'Programada' ? '#d1fae5' : '#fee2e2'">
+            {{ cita.estado }}
+          </span>
+        </td>
+      </tr>
+
+      <!-- Estado Vacío -->
+      <tr *ngIf="citasAgendadas.length === 0">
+        <td colspan="5" style="text-align:center; color:#888; padding: 20px;">No hay citas agendadas.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
