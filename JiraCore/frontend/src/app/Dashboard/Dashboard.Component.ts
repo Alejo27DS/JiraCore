@@ -1,34 +1,22 @@
-import { NgFor } from '@angular/common';
-import { Component, OnInit} from '@angular/core';
-import { DashboardService } from '../services/Dashboard';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Necesario para | date
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-Dashboard',
   standalone: true,
-  imports: [NgFor], // Importamos NgFor para usarlo en el HTML]
-  templateUrl: './dashboard.component.html', 
-  
+  imports: [
+    CommonModule // <--- IMPORTANTE para que funcione el formato de fecha
+  ],
+  templateUrl: './Dashboard.Component.html',
 })
 export class DashboardComponent implements OnInit {
 
-  // Variables para guardar los datos que vienen del Backend
-  stats: any;
-  activities: any[] = [];
-
-  constructor(private dashboardService: DashboardService) { }
-
+  fechaActual: Date = new Date(); // Obtiene la fecha y hora actual
+  usuarioActual: string = '';
+  s
   ngOnInit(): void {
-    this.cargarDatos();
-  }
-
-  cargarDatos() {
-    // Llamamos al API
-    this.dashboardService.getStats().subscribe(data => {
-      this.stats = data; // Guardamos los datos en la variable
-    });
-
-    this.dashboardService.getActivity().subscribe(data => {
-      this.activities = data;
-    });
+    // Obtenemos el email que guardamos en el Login
+    const user = localStorage.getItem('UserEmail');
+    this.usuarioActual = user ? user : '';
   }
 }

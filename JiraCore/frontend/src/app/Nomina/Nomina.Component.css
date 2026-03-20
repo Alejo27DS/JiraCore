@@ -1,0 +1,10 @@
+.nomina-grid {
+  display: grid;
+  /* Si quieres que estén uno debajo del otro (Columna), usa 1fr */
+  grid-template-columns: 1fr;
+  /* Si quieres que estén en 3 columnas (Fila), usa repeat(3, 1fr) */
+  /* grid-template-columns: repeat(3, 1fr); */
+  /* AUMENTA ESTE VALOR para separarlos más */
+  gap: 40px;
+  margin-top: 30px;
+}

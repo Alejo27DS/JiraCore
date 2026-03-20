@@ -1,34 +1,14 @@
-import { NgFor } from '@angular/common';
-import { Component, OnInit} from '@angular/core';
-import { NominaService } from '../services/Nomina';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router'; // Solo necesitas esto para los botones
 
 @Component({
-  selector: 'app-Nomina',
+  selector: 'app-nomina',
   standalone: true,
-  imports: [NgFor], // Importamos NgFor para usarlo en el HTML]
+  imports: [RouterLink],
   templateUrl: './Nomina.Component.html',
-
+  styleUrl: './Nomina.Component.css',
 })
-export class NominaComponent implements OnInit {
+export class NominaComponent {
+  title = 'Módulo de Nómina';
 
-  // Variables para guardar los datos que vienen del Backend
-  stats: any;
-  activities: any[] = [];
-
-  constructor(private nominaService: NominaService) { }
-
-  ngOnInit(): void {
-    this.cargarDatos();
-  }
-
-  cargarDatos() {
-    // Llamamos al API
-    this.nominaService.getStats().subscribe(data => {
-      this.stats = data; // Guardamos los datos en la variable
-    });
-
-    this.nominaService.getActivity().subscribe(data => {
-      this.activities = data;
-    });
-  }
 }

@@ -1,0 +1,84 @@
+<div class="ajuste-nomina-container">
+  <h2>Solicitud de Ingreso</h2>
+
+  <!-- (ngSubmit) maneja el envío, #solicitudForm valida -->
+  <form (ngSubmit)="guardarSolicitud()" #solicitudForm="ngForm" class="solicitud-personal-form">
+
+    <label for="cedula">Cédula:</label>
+    <input type="text" id="cedula" name="cedula" [(ngModel)]="solicitud.cedula" required />
+
+    <label for="resumen">Resumen:</label>
+    <input type="text" id="resumen" name="resumen" [(ngModel)]="solicitud.resumen" required />
+
+    <label for="fechaInforme">Fecha de informe:</label>
+    <input type="date" id="fechaInforme" name="fechaInforme" [(ngModel)]="solicitud.fechaInforme" required />
+
+    <label for="cargo">Cargo:</label>
+    <select id="cargo" name="cargo" [(ngModel)]="solicitud.cargo" required>
+      <option value="">Seleccione...</option>
+      <option value="cargo1">Cargo 1</option>
+      <option value="cargo2">Cargo 2</option>
+      <option value="cargo3">Cargo 3</option>
+      <option value="cargo4">Cargo 4</option>
+      <option value="cargo5">Cargo 5</option>
+    </select>
+
+    <label for="correoCorporativo">Correo Corporativo:</label>
+    <input type="text" id="correoCorporativo" name="correoCorporativo" [(ngModel)]="solicitud.correoCorporativo" required />
+
+    <label for="campanaArea">Campaña o Áreas:</label>
+    <select id="campanaArea" name="campanaArea" [(ngModel)]="solicitud.campanaArea">
+      <option value="" disabled selected>Seleccione una opción...</option>
+      <option value="Anla">Anla</option>
+      <option value="Ant">Ant</option>
+      <option value="ARN">ARN</option>
+      <option value="Banco de La Republica">Banco de La Republica</option>
+      <option value="Dissan Ibagué">Dissan Ibagué</option>
+      <option value="Dissan Risaralda">Dissan Risaralda</option>
+      <option value="Fedex">Fedex</option>
+      <option value="Feel">Feel</option>
+      <option value="Gerencia Control y Mejora">Gerencia Control y Mejora</option>
+      <option value="Gerencia Financiera y Administrativa">Gerencia Financiera y Administrativa</option>
+      <option value="Gerencia General">Gerencia General</option>
+      <option value="Gerencia Operaciones">Gerencia Operaciones</option>
+      <option value="Gerencia Recursos Humanos">Gerencia Recursos Humanos</option>
+      <option value="Gerencia Tecnologia">Gerencia Tecnologia</option>
+      <option value="Minigualdad">Minigualdad</option>
+      <option value="Ministerio del interior">Ministerio del interior</option>
+      <option value="Movilidad">Movilidad</option>
+      <option value="Opain">Opain</option>
+      <option value="Preppas">Preppas</option>
+      <option value="Rubicón">Rubicón</option>
+      <option value="Sanida Costa">Sanida Costa</option>
+      <option value="SIC">SIC</option>
+      <option value="Supersociedades empresarial">Supersociedades empresarial</option>
+      <option value="Uariv">Uariv</option>
+      <option value="Universidad Militar">Universidad Militar</option>
+    </select>
+
+    <label for="jefeInmediato">Jefe Inmediato:</label>
+    <input type="text" id="jefeInmediato" name="jefeInmediato" [(ngModel)]="solicitud.jefeInmediato" required />
+
+    <label for="fechaRetiro">Fecha de retiro:</label>
+    <input type="date" id="fechaRetiro" name="fechaRetiro" [(ngModel)]="solicitud.fechaRetiro" required />
+
+    <label for="motivoRetiro">Motivo del retiro:</label>
+    <input type="text" id="motivoRetiro" name="motivoRetiro" [(ngModel)]="solicitud.motivoRetiro" required />
+
+    <label for="documento">Adjuntar Carta de renuncia:</label>
+    <!-- Usamos (change) para capturar el archivo -->
+    <input type="file" id="documento" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.jpg,.png" required />
+
+    <label for="descripcion">Descripción:</label>
+    <input type="text" id="descripcion" name="descripcion" [(ngModel)]="solicitud.descripcion" required />
+
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+      <!-- Botón GUARDAR -->
+      <button type="submit" class="btn btn-primary" [disabled]="solicitudForm.invalid">Guardar</button>
+
+      <!-- Botón CANCELAR -->
+      <button type="button" (click)="cancelar()" class="btn btn-warning">Cancelar</button>
+    </div>
+
+  </form>
+</div>

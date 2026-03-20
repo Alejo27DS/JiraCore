@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
   // Asegúrate de poner la URL correcta de tu API (usualmente https://localhost:5062/...)
-  private apiUrl = 'https://localhost:7263/api/dashboard';
+  private apiUrl = 'https://localhost:7263';
 
   constructor(private http: HttpClient) { }
 
