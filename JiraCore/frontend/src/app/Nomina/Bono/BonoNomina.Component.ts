@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router'; // Para navegar al cancelar
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // IMPORTANTE: Permite usar ngModel
+import { SolicitudesService } from '../../services/Solicitudes';
 
 @Component({
   selector: 'app-Bono',
@@ -27,15 +28,21 @@ export class BonoNominaComponent {
     descripcion: ''
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
   guardarBono() {
-    // Aquí iría la llamada a tu API (Service) para guardar
-    console.log('Datos a guardar:', this.solicitud);
-    alert('Bono guardado correctamente: ' + this.solicitud.nombre);
-
-    // Opcional: volver a la lista de nómina
-    // this.router.navigate(['/nomina']);
+    // Usamos el servicio genérico
+    this.solicitudesService.crearSolicitud('Bono de Mera Liberalidad', this.solicitud).subscribe({
+      next: (res: any) => {
+        console.error("Respuesta del servidor:", res)
+        alert('Solicitud enviada a Administración/RRHH');
+        this.router.navigate(['/nomina']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {

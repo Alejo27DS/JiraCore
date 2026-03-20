@@ -2,7 +2,7 @@
   <h2>Retiro de sesantías</h2>
 
   <!-- (ngSubmit) maneja el envío, #cesantiasForm permite validar -->
-  <form (ngSubmit)="guardarCesantia()" #cesantiasForm="ngForm" class="solicitud-personal-form">
+  <form (ngSubmit)="guardarCesantias()" #cesantiasForm="ngForm" class="solicitud-personal-form">
 
     <label for="generador">Generar esta solicitud en nombre de:</label>
     <select id="generador" name="generador" [(ngModel)]="cesantia.generador" required>

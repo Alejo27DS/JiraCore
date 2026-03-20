@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SolicitudesService } from '../../services/Solicitudes';
+
 
 @Component({
   selector: 'app-Descuento',
@@ -16,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 export class DescuentoNominaComponent {
 
   // Objeto para guardar los datos
-  descuento: any= {
+  descuento: any = {
     generador: '',
     resumen: '',
     cedula: '',
@@ -28,7 +30,7 @@ export class DescuentoNominaComponent {
     archivo: null
   };
 
-  constructor(private router: Router) { } 
+  constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
   // Método para capturar el archivo cuando el usuario lo selecciona
   onFileSelected(event: any) {
@@ -37,21 +39,21 @@ export class DescuentoNominaComponent {
       this.descuento.archivo = file;
       console.log('Archivo seleccionado:', file.name);
     }
-  }
+  };
 
   guardarDescuento() {
-    console.log('Descuento guardado:', this.descuento);
-    console.log('Archivo adjunto:', this.descuento.archivo ? this.descuento.archivo.name : 'No adjuntado');
-
-    alert(`Descuento guardado para ${this.descuento.nombre}. Valor: ${this.descuento.valorDescuento}`);
-
-    // (Opcional) Para subir archivos reales, necesitarías usar FormData en tu Servicio
-    // const formData = new FormData();
-    // formData.append('file', this.descuento.archivo);
-    // this.descuentoService.subir(formData).subscribe(...);
-
-    // (Opcional) Volver al menú
-    // this.router.navigate(['/nomina']);
+    // Usamos el servicio genérico
+    this.solicitudesService.crearSolicitud('Descuento de Nomina', this.descuento).subscribe({
+      next: (res: any) => {
+        console.error("Respuesta del servidor:", res)
+        alert('Solicitud enviada a Administración/RRHH');
+        this.router.navigate(['/nomina']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {
