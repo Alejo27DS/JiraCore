@@ -1,0 +1,79 @@
+<div class="ajuste-nomina-container">
+  <h2>Reporte de embarazo</h2>
+
+  <form #reporteForm="ngForm" (ngSubmit)="guardarReporte()" class="solicitud-personal-form">
+
+    <label for="solicitante">Generar esta solicitud en nombre de</label>
+    <select id="solicitante"
+            name="solicitanteEnNombreDe"
+            [(ngModel)]="reporte.solicitanteEnNombreDe"
+            required>
+      <option value="">Seleccione...</option>
+      @for (soli of solicitantes; track soli.valor) {
+      <option [ngValue]="soli.valor">{{ soli.texto }}</option>
+      }
+    </select>
+
+    <label for="resumen">Resumen</label>
+    <input type="text" id="resumen" name="resumen" [(ngModel)]="reporte.resumen" required />
+
+    <label for="cedula">Cedula</label>
+    <input type="text" id="cedula" name="cedula" [(ngModel)]="reporte.cedula" required />
+
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" [(ngModel)]="reporte.nombre" required />
+
+    <label for="cargo" class="form-label">Cargo</label>
+    <select id="cargo"
+            name="cargo"
+            class="form-select sst-select"
+            [(ngModel)]="reporte.cargo"
+            required>
+      <option value="" selected disabled>Seleccione un cargo</option>
+      @for (cargo of cargos; track cargo) {
+      <option>{{ cargo }}</option>
+      }
+    </select>
+
+    <label for="campania">Campaña o Áreas:</label>
+    <select id="campania"
+            name="campaniaArea"
+            [(ngModel)]="reporte.campaniaArea"
+            required>
+      <option value="" disabled selected>Seleccione una opción...</option>
+      @for (camp of campanias; track camp) {
+      <option [ngValue]="camp">{{ camp }}</option>
+      }
+    </select>
+
+    <label for="numeroContacto">Numero de contacto</label>
+    <input type="text" id="numeroContacto" name="numeroContacto" [(ngModel)]="reporte.numeroContacto" required />
+
+    <label for="correoCorporativo">Correo corporativo</label>
+    <input type="email" id="correoCorporativo" name="correoCorporativo" [(ngModel)]="reporte.correoCorporativo" required />
+
+    <!-- Campo específico: Fecha del reporte -->
+    <label for="fechaReporte">Fecha del reporte</label>
+    <input type="date" id="fechaReporte" name="fechaReporte" [(ngModel)]="reporte.fechaReporte" required />
+
+    <!-- Campo específico: Fecha de ingreso -->
+    <label for="fechaIngreso">Fecha de ingreso</label>
+    <input type="date" id="fechaIngreso" name="fechaIngreso" [(ngModel)]="reporte.fechaIngreso" required />
+
+    <label for="documento">Adjuntar reporte de embarazo:</label>
+    <input type="file"
+           id="documento"
+           name="documento"
+           accept=".pdf,.doc,.docx,.jpg,.png"
+           (change)="onFileSelected($event)"
+           required />
+
+    <div>
+      <button type="submit" [disabled]="reporteForm.invalid">Guardar</button>
+    </div>
+    <div>
+      <button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+
+  </form>
+</div>

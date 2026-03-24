@@ -1,0 +1,60 @@
+<div class="solicitud-personal-container">
+  <h2>Cambio de Campaña</h2>
+
+  <!-- Formulario -->
+  <form (ngSubmit)="guardarCambio()" #cambioForm="ngForm" class="solicitud-personal-form">
+
+    <!-- Campos conectados -->
+    <label for="cedula">Cédula:</label>
+    <input type="text" id="cedula" name="cedula" [(ngModel)]="cambio.cedula" required />
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" [(ngModel)]="cambio.nombre" required />
+
+    <label for="cargo">Cargo:</label>
+    <select id="cargo" name="cargo" [(ngModel)]="cambio.cargo" required>
+      <option value="" disabled selected>Seleccione un cargo</option>
+      <option>ACCOUNT EXECUTIVE</option>
+      <option>ADMINISTRADOR OPERATIVO DE INFRAESTRUCTURA</option>
+      <option>AGENTE</option>
+      <option>AGENTE BACKUP</option>
+      <option>GERENTE DE PROYECTO</option>
+      <!-- ... resto de opciones ... -->
+    </select>
+
+    <label for="campana-area">Campaña o Áreas:</label>
+    <select id="campana-area" name="campana-area" [(ngModel)]="cambio.campanaArea">
+      <option value="" disabled selected>Seleccione una opción...</option>
+      <option value="Anla">Anla</option>
+      <option value="Ant">Ant</option>
+      <option value="ARN">ARN</option>
+      <option value="Banco de La Republica">Banco de La Republica</option>
+      <option value="Dissan Ibagué">Dissan Ibagué</option>
+      <option value="Dissan Risaralda">Dissan Risaralda</option>
+      <option value="Fedex">Fedex</option>
+      <option value="Feel">Feel</option>
+      <option value="Gerencia Control y Mejora">Gerencia Control y Mejora</option>
+      <option value="Gerencia General">Gerencia General</option>
+      <option>GERENTE DE TALENTO HUMANO Y CULTURA</option>
+      <option>MINERIO DE DATOS</option>
+      <option>RECEPCIONISTA</option>
+    </select>
+
+    <label for="ultimoDiaLaborado">Último día laborado en la actual campaña:</label>
+    <input type="date" id="ultimoDiaLaborado" name="ultimoDiaLaborado" [(ngModel)]="cambio.ultimoDiaLaborado" required />
+
+    <label for="documento">Adjuntar el paz y salvo debidamente firmado:</label>
+    <input type="file" id="documento" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.jpg,.png" required />
+
+    <label for="correoElectronicoSupervisor">Correo electrónico del nuevo supervisor:</label>
+    <input type="text" id="correoElectronicoSupervisor" name="correoElectronicoSupervisor" [(ngModel)]="cambio.correoElectronicoSupervisor" required />
+
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+      <!-- Botón GUARDAR: type="submit" -->
+      <button type="submit" class="btn btn-primary" [disabled]="cambioForm.invalid">Guardar</button>
+
+      <!-- Botón CANCELAR: type="button" y sin disabled -->
+      <button type="button" (click)="cancelar()" class="btn btn-warning">Cancelar</button>
+    </div>
+  </form>
+</div>

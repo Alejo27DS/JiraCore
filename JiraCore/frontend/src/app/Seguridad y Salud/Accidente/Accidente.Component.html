@@ -1,0 +1,81 @@
+<div class="ajuste-nomina-container">
+  <h2>Accidentes de trabajo</h2>
+
+  <!-- Agregamos #accidenteForm="ngForm" para poder validar el estado del formulario -->
+  <form #accidenteForm="ngForm" (ngSubmit)="guardarAccidente()" class="solicitud-personal-form">
+
+    <label for="solicitante">Generar esta solicitud en nombre de</label>
+    <select id="solicitante"
+            name="solicitanteEnNombreDe"
+            [(ngModel)]="accidente.solicitanteEnNombreDe"
+            required>
+      <option value="">Seleccione...</option>
+      @for (soli of solicitantes; track soli.valor) {
+      <option [ngValue]="soli.valor">{{ soli.texto }}</option>
+      }
+    </select>
+
+    <label for="resumen">Resumen</label>
+    <input type="text" id="resumen" name="resumen" [(ngModel)]="accidente.resumen" required />
+
+    <label for="cedula">Cedula</label>
+    <input type="text" id="cedula" name="cedula" [(ngModel)]="accidente.cedula" required />
+
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" [(ngModel)]="accidente.nombre" required />
+
+    <label for="cargo" class="form-label">Cargo</label>
+    <select id="cargo"
+            name="cargo"
+            class="form-select sst-select"
+            [(ngModel)]="accidente.cargo"
+            required>
+      <option value="" selected disabled>Seleccione un cargo</option>
+      @for (cargo of cargos; track cargo) {
+      <option>{{ cargo }}</option>
+      }
+    </select>
+
+    <label for="campania">Campaña o Áreas:</label>
+    <select id="campania"
+            name="campaniaArea"
+            [(ngModel)]="accidente.campaniaArea"
+            required>
+      <option value="" disabled selected>Seleccione una opción...</option>
+      @for (camp of campanias; track camp) {
+      <option [ngValue]="camp">{{ camp }}</option>
+      }
+    </select>
+
+    <label for="numeroContacto">Numero de contacto</label>
+    <input type="text" id="numeroContacto" name="numeroContacto" [(ngModel)]="accidente.numeroContacto" required />
+
+    <label for="fechaAccidente">Fecha del accidente</label>
+    <input type="date" id="fechaAccidente" name="fechaAccidente" [(ngModel)]="accidente.fechaAccidente" required />
+
+    <label for="correoCorporativo">Correo corporativo</label>
+    <input type="email" id="correoCorporativo" name="correoCorporativo" [(ngModel)]="accidente.correoCorporativo" required />
+
+    <label for="descripcionHechos">Descripcion de los hechos</label>
+    <input type="text" id="descripcionHechos" name="descripcionHechos" [(ngModel)]="accidente.descripcionHechos" required />
+
+    <label for="documento">Adjuntar evidencias del accidente:</label>
+    <!-- Nota: No usamos [(ngModel)] en el input file, confiamos en el evento (change) -->
+    <input type="file"
+           id="documento"
+           name="documento"
+           accept=".pdf,.doc,.docx,.jpg,.png"
+           (change)="onFileSelected($event)"
+           required />
+
+    <div>
+      <!-- Se deshabilita si el formulario es inválido -->
+      <button type="submit" [disabled]="accidenteForm.invalid">Guardar</button>
+    </div>
+    <div>
+      <!-- Botón cancelar type button para no enviar el formulario -->
+      <button type="button" (click)="cancelar()">Cancelar</button>
+    </div>
+
+  </form>
+</div>
