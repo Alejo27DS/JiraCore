@@ -4,11 +4,15 @@
   <div class="sidebar" *ngIf="isLoggedIn">
     <div class="sidebar-header">BPM SYSTEM</div>
 
+    <a routerLink="admin-panel" *ngIf="isAdmin" class="menu-item" style="background: #333; color: yellow; font-weight: bold;">
+      📋 Aprobaciones Pendientes (Admin)
+    </a>
+
     <a routerLink="dashboard" routerLinkActive="active" class="menu-item">Dashboard</a>
     <a routerLink="nomina" routerLinkActive="active" class="menu-item">Nomina</a>
     <a routerLink="solicitudes" routerLinkActive="active" class="menu-item">Solicitudes</a>
     <a routerLink="retiro" routerLinkActive="active" class="menu-item">Retiro</a>
-    <a routerLink="cambiocampaña" routerLinkActive="active" class="menu-item">Cambio de Campaña</a>
+    <a routerLink="campaña" routerLinkActive="active" class="menu-item">Cambio de Campaña</a>
     <a routerLink="sst" routerLinkActive="active" class="menu-item">Citas SST</a>
     <a routerLink="seguridad" routerLinkActive="active" class="menu-item">Seguridad y Salud</a>
 

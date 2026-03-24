@@ -8,13 +8,13 @@
   border: 1.5px solid #2563eb;
 }
 
-  .solicitud-personal-container h2 {
-    text-align: center;
-    color: #2563eb;
-    margin-bottom: 24px;
-    font-size: 1.5em;
-    letter-spacing: 1px;
-  }
+.solicitud-personal-container h2 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 24px;
+  font-size: 1.5em;
+  letter-spacing: 1px;
+}
 
 .solicitud-personal-form {
   display: flex;

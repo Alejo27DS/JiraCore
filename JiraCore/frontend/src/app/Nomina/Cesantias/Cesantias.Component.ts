@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SolicitudesService } from '../../services/Solicitudes';
 
 @Component({
   selector: 'app-Cesantias',
@@ -26,17 +27,21 @@ export class CesantiasComponent {
     descripcion: ''
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
-  guardarCesantia() {
-    console.log('Solicitud de cesantías guardada:', this.cesantia);
-    alert(`Solicitud de retiro generada para ${this.cesantia.nombre}.`);
-
-    // (Opcional) Lógica para guardar en BD
-    // this.cesantiasService.guardar(this.cesantia).subscribe(...);
-
-    // (Opcional) Volver al menú
-    // this.router.navigate(['/nomina']);
+  guardarCesantias() {
+    // Usamos el servicio genérico
+    this.solicitudesService.crearSolicitud('Retiro de Cesantias', this.cesantia).subscribe({
+      next: (res: any) => {
+        console.error("Respuesta del servidor:", res)
+        alert('Solicitud enviada a Administración/RRHH');
+        this.router.navigate(['/nomina']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {
