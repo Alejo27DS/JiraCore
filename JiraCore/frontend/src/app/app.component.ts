@@ -10,8 +10,8 @@ import { NgIf } from '@angular/common';
     RouterLink,
     NgIf
   ],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'bpm-wireframe';
@@ -27,7 +27,7 @@ export class AppComponent {
     this.router.events.subscribe((event) => {
       // Solo reaccionamos cuando la navegación termina completamente
       if (event instanceof NavigationEnd) {
-     
+    
         if (typeof window !== 'undefined') {
           this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
         }
