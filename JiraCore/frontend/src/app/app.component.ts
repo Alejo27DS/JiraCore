@@ -10,35 +10,30 @@ import { NgIf } from '@angular/common';
     RouterLink,
     NgIf
   ],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'bpm-wireframe';
 
   isLoggedIn: boolean = false;
-  isAdmin: boolean =false
 
   constructor(private router: Router) {
+    // 1. Estado inicial
     if (typeof window !== 'undefined') {
       this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
-
-
-      const userEmail = localStorage.getItem('UserEmail');
-      if (userEmail === 'admin@bpm.com') {
-        this.isAdmin = true;
-      }
     }
 
     this.router.events.subscribe((event) => {
+      // Solo reaccionamos cuando la navegación termina completamente
       if (event instanceof NavigationEnd) {
-        const userEmail = localStorage.getItem('UserEmail');
-        this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
-        this.isAdmin = (userEmail === 'admin@bpm.com');
+    
+        if (typeof window !== 'undefined') {
+          this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
+        }
       }
     });
   }
-  // ... resto del código (logout, etc)
 
   logout() {
     // 1. Borramos la sesión

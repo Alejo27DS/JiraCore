@@ -1,54 +1,54 @@
-using Microsoft.AspNetCore.Mvc; // <--- IMPORTANTE: Esto es el que trae la clase OpenApiInfo
-using Microsoft.AspNetCore.Routing;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using MongoDB.Driver;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace JiraCore
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+
+builder.Services.AddCors(options =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+    options.AddPolicy("Angular",
+        policy =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            policy.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
-            // 1. Agregar Servicios
-            builder.Services.AddControllers();
+    // --- INICIO CONEXIÓN MONGODB ---
 
-            // 2. Configuración de CORS
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("PermitirAngular",
-                    policy => policy
-                        .WithOrigins("http://localhost:4200")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-            });
+    // 1. Leemos la cadena de conexión y el nombre de la BD del archivo appsettings.json
+    var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB");
+    var mongoDatabaseName = builder.Configuration["DatabaseName"];
 
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "JiraCore API", Version = "v1" });
-            });
+    // 2. Creamos el cliente de MongoDB
+    var mongoClient = new MongoClient(mongoConnectionString);
 
-            var app = builder.Build();
+    // 3. Obtenemos la base de datos (bpm_consulting)
+    var database = mongoClient.GetDatabase(mongoDatabaseName);
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+    // 4. Registramos la base de datos en el sistema de Inyección de Dependencias
+    // Esto permite que tus Controladores pidan la base de datos con "IMongoDatabase"
+    builder.Services.AddSingleton<IMongoDatabase>(database);
 
-            // -----------------------------------------------------
-            // app.UseHttpsRedirection(); 
-            // -----------------------------------------------------
+    // --- FIN CONEXIÓN MONGODB ---
+var app = builder.Build();
 
-            app.UseRouting();
-            app.UseCors("PermitirAngular");
-            app.UseAuthorization();
+app.UseCors("Angular");
 
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
