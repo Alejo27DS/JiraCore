@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SolicitudesService } from '../../services/Solicitudes';
 
 @Component({
   selector: 'app-Auxilio',
@@ -27,17 +28,21 @@ export class AuxilioRodamientoComponent {
     descripcion: ''
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
   guardarAuxilio() {
-    console.log('Auxilio guardado:', this.auxilio);
-    alert(`Auxilio de rodamiento guardado para ${this.auxilio.nombre}. Valor: ${this.auxilio.valorAuxilio}`);
-
-    // (Opcional) Lógica para guardar en BD
-    // this.rodamientoService.guardar(this.auxilio).subscribe(...);
-
-    // (Opcional) Volver al menú
-    // this.router.navigate(['/nomina']);
+    // Usamos el servicio genérico
+    this.solicitudesService.crearSolicitud('Auxio de Rodamiento', this.auxilio).subscribe({
+      next: (res: any) => {
+        console.error("Respuesta del servidor:", res)
+        alert('Solicitud enviada a Administración/RRHH');
+        this.router.navigate(['/nomina']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {

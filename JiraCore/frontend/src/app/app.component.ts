@@ -17,23 +17,20 @@ export class AppComponent {
   title = 'bpm-wireframe';
 
   isLoggedIn: boolean = false;
+  isAdmin: boolean =false
 
   constructor(private router: Router) {
-    // 1. Estado inicial
     if (typeof window !== 'undefined') {
       this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
-    }
 
-    this.router.events.subscribe((event) => {
-      // Solo reaccionamos cuando la navegación termina completamente
-      if (event instanceof NavigationEnd) {
-     
-        if (typeof window !== 'undefined') {
-          this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
-        }
+      // --- AGREGA ESTA LÓGICA ---
+      const userEmail = localStorage.getItem('UserEmail');
+      if (userEmail === 'admin@bpm.com') {
+        this.isAdmin = true;
       }
-    });
+    }
   }
+  // ... resto del código (logout, etc)
 
   logout() {
     // 1. Borramos la sesión

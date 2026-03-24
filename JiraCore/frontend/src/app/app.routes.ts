@@ -10,6 +10,7 @@ import { CesantiasComponent } from './Nomina/Cesantias/Cesantias.Component';
 import { SolicitudesComponent } from './Solicitudes/Solicitudes.Component';
 import { RetiroComponent } from './RetiroPersonal/Retiro.Component';
 import { CitasSSTComponent } from './SST/CitasSST.Component';
+import { AdminPanelComponent } from './Admin/AdminPanel.Component';
 
 
 
@@ -25,5 +26,6 @@ export const routes: Routes = [
   { path: 'solicitudes', component: SolicitudesComponent },
   { path: 'retiro', component: RetiroComponent },
   { path: 'sst', component: CitasSSTComponent },
+  { path: 'admin-panel', component: AdminPanelComponent },
 
 ];
