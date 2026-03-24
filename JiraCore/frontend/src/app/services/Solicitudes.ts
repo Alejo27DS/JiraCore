@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
-})
+})  
 export class SolicitudesService {
-  private apiUrl = 'https://localhost:7263/api/solicitudes'; // Tu puerto de Backend
+  private apiUrl = 'http://localhost:7264/api/solicitudes'; // Tu puerto de Backend
 
   constructor(private http: HttpClient) { }
 
@@ -21,6 +21,10 @@ export class SolicitudesService {
       formData.append('archivo', archivo);
     }
 
-    return this.http.post(`${this.apiUrl}/crear`, formData);
+    return this.http.post(`${this.apiUrl}/crear`, formData);  
+  }
+
+  getPendientes() {
+    return this.http.get(`${this.apiUrl}/pendientes`);
   }
 }

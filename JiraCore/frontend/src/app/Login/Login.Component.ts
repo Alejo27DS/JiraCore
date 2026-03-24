@@ -28,11 +28,14 @@ export class LoginComponent {
       // Verificamos si estamos en el navegador
       if (typeof window !== 'undefined') {
         localStorage.setItem('isLoggedIn', 'true');
+
+        // --- AGREGA ESTA LÍNEA CRÍTICA ---
+        localStorage.setItem('UserEmail', this.email);
       }
       this.router.navigate(['/dashboard']);
     }
     else {
-      alert("Porfavor ingresa usuario y contraseña")
+      alert("Porfavor ingresa usuario y contraseña");
     }
   }
 }

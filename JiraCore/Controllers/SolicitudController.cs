@@ -1,15 +1,19 @@
 ﻿using JiraCore.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JiraCore.Controllers
 {
-    [ApiController]
-    [Route("api/controller")]
-    public class SolicitudController : Controller
+    [ApiController] // <--- IMPORTANTE: Necesario para que Swagger lo encuentre
+    [Route("api/[controller]")]
+    public class SolicitudController : ControllerBase
     {
-        // Lista estática para simular Base de Datos (Se borra al reiniciar el servidor)
+        // Usa la lista estática que definimos en el Backend
         private static List<Solicitud> solicitudes = new List<Solicitud>();
         private static int contador = 1;
+
+        // <--- IMPORTANTE: Inyectar HttpClient es necesario para que el código compile
+        public SolicitudController() { }
 
         // POST: api/solicitudes/crear
         [HttpPost("crear")]
@@ -19,14 +23,11 @@ namespace JiraCore.Controllers
             {
                 Id = contador++,
                 Tipo = tipo,
-                Datos = datos, // Aquí llega el JSON del formulario
-                NombreEmpleado = "Usuario Simulado", // En un sistema real, esto viene del Login (JWT)
+                Datos = datos,
+                NombreEmpleado = "Usuario Simulado", // O usa JWT si lo tienes
                 Estado = "Pendiente",
                 Fecha = DateTime.Now
             };
-
-            // Aquí podrías guardar el archivo en disco si quieres
-            // if (archivo != null) { ... }
 
             solicitudes.Add(nuevaSolicitud);
 

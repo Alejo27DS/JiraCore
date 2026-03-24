@@ -23,12 +23,20 @@ export class AppComponent {
     if (typeof window !== 'undefined') {
       this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
 
-      // --- AGREGA ESTA LÓGICA ---
+
       const userEmail = localStorage.getItem('UserEmail');
       if (userEmail === 'admin@bpm.com') {
         this.isAdmin = true;
       }
     }
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const userEmail = localStorage.getItem('UserEmail');
+        this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
+        this.isAdmin = (userEmail === 'admin@bpm.com');
+      }
+    });
   }
   // ... resto del código (logout, etc)
 

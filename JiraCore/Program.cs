@@ -1,36 +1,54 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Mvc; // <--- IMPORTANTE: Esto es el que trae la clase OpenApiInfo
+using Microsoft.AspNetCore.Routing;
+using Microsoft.OpenApi;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-builder.Services.AddCors(options =>
+namespace JiraCore
 {
-    options.AddPolicy("Angular",
-        policy =>
+    public class Program
+    {
+        public static void Main(string[] args)
         {
-            policy.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
+            var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+            // 1. Agregar Servicios
+            builder.Services.AddControllers();
 
-app.UseCors("Angular");
+            // 2. Configuración de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirAngular",
+                    policy => policy
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "JiraCore API", Version = "v1" });
+            });
+
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            // -----------------------------------------------------
+            // app.UseHttpsRedirection(); 
+            // -----------------------------------------------------
+
+            app.UseRouting();
+            app.UseCors("PermitirAngular");
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

@@ -10,6 +10,11 @@ import { CesantiasComponent } from './Nomina/Cesantias/Cesantias.Component';
 import { SolicitudesComponent } from './Solicitudes/Solicitudes.Component';
 import { RetiroComponent } from './RetiroPersonal/Retiro.Component';
 import { CitasSSTComponent } from './SST/CitasSST.Component';
+import { CampañaComponent } from './CambioCampaña/Campaña.Component';
+import { SeguridadComponent } from './Seguridad y Salud/Seguridad.Component';
+import { EmbarazoComponent } from './Seguridad y Salud/Embarazo/Embarazo.Componenet';
+import { AccidenteComponent } from './Seguridad y Salud/Accidente/Accidente.Component';
+import { CondicionSaludComponent } from './Seguridad y Salud/CondicionSalud/CondicionSalud.Component';
 import { AdminPanelComponent } from './Admin/AdminPanel.Component';
 
 
@@ -26,6 +31,11 @@ export const routes: Routes = [
   { path: 'solicitudes', component: SolicitudesComponent },
   { path: 'retiro', component: RetiroComponent },
   { path: 'sst', component: CitasSSTComponent },
+  { path: 'campaña', component: CampañaComponent },
+  { path: 'seguridad', component: SeguridadComponent },
+  { path: 'seguridad/embarazo', component: EmbarazoComponent },
+  { path: 'seguridad/condicion-especial', component: CondicionSaludComponent },
+  { path: 'seguridad/accidente', component: AccidenteComponent },
   { path: 'admin-panel', component: AdminPanelComponent },
 
 ];
