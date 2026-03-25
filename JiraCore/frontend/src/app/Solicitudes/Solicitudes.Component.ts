@@ -1,24 +1,24 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SolicitudesService } from '../services/Solicitudes';
-
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { inject } from '@angular/core';
 
 @Component({
-  selector: 'app-Solicitudes',
+  selector: 'app-solicitudes',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
-  templateUrl: './Solicitudes.Component.html',
-  styleUrl: './Solicitudes.Component.css',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './solicitudes.component.html', // Asegúrate que este archivo sea el correcto
+  styleUrls: ['./Solicitudes.Component.css'] // Usa el nombre exacto que te pide el warning
 })
 export class SolicitudesComponent {
 
-  // Objeto para guardar los datos (usamos : any para evitar errores de tipos)
-  solicitud: any = {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
+  // --- ESTA ES LA PROPIEDAD QUE FALTABA ---
+  solicitud = {
     cedula: '',
     resumen: '',
     fechaInforme: '',
@@ -28,48 +28,58 @@ export class SolicitudesComponent {
     jefeInmediato: '',
     fechaRetiro: '',
     motivoRetiro: '',
-    descripcion: '',
-    archivo: null // Aquí guardamos el archivo
+    descripcion: ''
   };
 
-  constructor(private router: Router) { }
+  archivoSeleccionado: File | null = null;
 
-  // Método para capturar el archivo
+  // --- ESTE MÉTODO FALTABA ---
+  guardarSolicitud() {
+    if (!this.archivoSeleccionado) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    const formData = new FormData();
+    Object.keys(this.solicitud).forEach(key => {
+      formData.append(key, (this.solicitud as any)[key]);
+    });
+    formData.append('documento', this.archivoSeleccionado);
+
+    // Ajusta la URL a tu backend
+    this.http.post('https://localhost:7015/api/solicitudes', formData).subscribe({
+      next: (res) => {
+        alert('Solicitud guardada con éxito');
+        this.limpiarFormulario();
+      },
+      error: (err: any) => {
+        console.error(err);
+        alert('Error al guardar');
+      }
+    });
+  }
+
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.solicitud.archivo = file;
-      console.log('Archivo seleccionado:', file.name);
+      this.archivoSeleccionado = file;
     }
   }
 
-  guardarSolicitud() {
-    console.log('Solicitud guardada:', this.solicitud);
-    console.log('Archivo adjunto:', this.solicitud.archivo ? this.solicitud.archivo.name : 'No adjuntado');
-
-    alert(`Solicitud guardada para Cédula: ${this.solicitud.cedula}.`);
-
-    // (Opcional) Lógica para guardar en BD
-    // this.solicitudService.guardar(this.solicitud).subscribe(...);
-
-    // (Opcional) Volver al menú
-    // this.router.navigate(['/nomina']);
+  cancelar() {
+    if(confirm('¿Cancelar?')) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
-  cancelar() {
+  private limpiarFormulario() {
     this.solicitud = {
-      cedula: '',
-      resumen: '',
-      fechaInforme: '',
-      cargo: '',
-      correoCorporativo: '',
-      campanaArea: '',
-      jefeInmediato: '',
-      fechaRetiro: '',
-      motivoRetiro: '',
-      descripcion: '',
-      archivo: null
+      cedula: '', resumen: '', fechaInforme: '', cargo: '',
+      correoCorporativo: '', campanaArea: '', jefeInmediato: '',
+      fechaRetiro: '', motivoRetiro: '', descripcion: ''
     };
-    this.router.navigate(['/nomina']);
+    this.archivoSeleccionado = null;
+    const fileInput = document.getElementById('documento') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   }
 }

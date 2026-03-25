@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, Router, NavigationEnd } from '@angular/router'; 
+import { RouterOutlet, RouterLink, Router, NavigationEnd} from '@angular/router'; 
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -17,6 +17,7 @@ export class AppComponent {
   title = 'bpm-wireframe';
 
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false; // Aquí podrías implementar una lógica real para determinar si el usuario es admin
 
   constructor(private router: Router) {
     // 1. Estado inicial

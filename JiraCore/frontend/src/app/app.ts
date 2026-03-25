@@ -20,7 +20,7 @@ export class AppComponent {
 
       // --- AGREGA ESTA LÓGICA ---
       const userEmail = localStorage.getItem('UserEmail');
-      if (userEmail === 'admin@bpm.com') {
+      if (userEmail === '') {
         this.isAdmin = true;
       }
     }

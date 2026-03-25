@@ -12,7 +12,7 @@ import { RetiroComponent } from './RetiroPersonal/Retiro.Component';
 import { CitasSSTComponent } from './SST/CitasSST.Component';
 import { CampañaComponent } from './CambioCampaña/Campaña.Component';
 import { SeguridadComponent } from './Seguridad y Salud/Seguridad.Component';
-import { EmbarazoComponent } from './Seguridad y Salud/Embarazo/Embarazo.Componenet';
+import { EmbarazoComponent } from './Seguridad y Salud/Embarazo/Embarazo.Component';
 import { AccidenteComponent } from './Seguridad y Salud/Accidente/Accidente.Component';
 import { CondicionSaludComponent } from './Seguridad y Salud/CondicionSalud/CondicionSalud.Component';
 import { AdminPanelComponent } from './Admin/AdminPanel.Component';
