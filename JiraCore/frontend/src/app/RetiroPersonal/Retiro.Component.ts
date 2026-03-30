@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SolicitudesService } from '../services/Solicitudes'; // <--- 1. Importar el servicio
 
 @Component({
   selector: 'app-Retiro',
@@ -11,11 +12,10 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   templateUrl: './Retiro.Component.html',
-  styleUrls: ['./Retiro.Component.css'] // Bórralo si no existe
+  styleUrls: ['./Retiro.Component.css']
 })
 export class RetiroComponent {
 
-  // Objeto para guardar los datos (usamos : any)
   retiro: any = {
     cedula: '',
     resumen: '',
@@ -27,12 +27,15 @@ export class RetiroComponent {
     fechaRetiro: '',
     motivoRetiro: '',
     descripcion: '',
-    archivo: null // Aquí guardamos el archivo
+    archivo: null
   };
 
-  constructor(private router: Router) { }
+  // <--- 2. Inyectar el servicio en el constructor
+  constructor(
+    private router: Router,
+    private solicitudesService: SolicitudesService
+  ) { }
 
-  // Método para capturar el archivo
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -42,16 +45,18 @@ export class RetiroComponent {
   }
 
   guardarRetiro() {
-    console.log('Solicitud de retiro guardada:', this.retiro);
-    console.log('Archivo adjunto:', this.retiro.archivo ? this.retiro.archivo.name : 'No adjuntado');
-
-    alert(`Solicitud de retiro guardada para Cédula: ${this.retiro.cedula}.`);
-
-    // (Opcional) Lógica para guardar en BD
-    // this.retiroService.guardar(this.retiro).subscribe(...);
-
-    // (Opcional) Volver al menú
-    // this.router.navigate(['/nomina']);
+    // <--- 3. Usar el servicio real enviando 'Retiro' como tipo
+    this.solicitudesService.crearSolicitud('Retiro', this.retiro, this.retiro.archivo).subscribe({
+      next: (res: any) => {
+        console.log("Respuesta del servidor:", res);
+        alert('Solicitud de Retiro enviada a Talento Humano');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {
@@ -68,6 +73,6 @@ export class RetiroComponent {
       descripcion: '',
       archivo: null
     };
-    this.router.navigate(['/nomina']);
+    this.router.navigate(['/dashboard']);
   }
 }

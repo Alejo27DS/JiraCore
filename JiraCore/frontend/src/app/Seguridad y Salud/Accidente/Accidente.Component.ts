@@ -96,6 +96,6 @@ export class AccidenteComponent {
       descripcionHechos: '',
       archivo: null
     };
-    this.router.navigate(['/nomina']);
+    this.router.navigate(['/seguridad']);
   }
 }

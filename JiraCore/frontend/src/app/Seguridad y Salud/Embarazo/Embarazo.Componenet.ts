@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // 1. Importamos OnInit
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +14,8 @@ import { SolicitudesService } from '../../services/Solicitudes';
   templateUrl: './Embarazo.Component.html',
   styleUrls: ['./Embarazo.Component.css']
 })
-export class EmbarazoComponent {
+// 2. Implementamos la interfaz OnInit
+export class EmbarazoComponent implements OnInit {
 
   // Objeto para guardar los datos
   reporte: any = {
@@ -26,8 +27,8 @@ export class EmbarazoComponent {
     campaniaArea: '',
     numeroContacto: '',
     correoCorporativo: '',
-    fechaReporte: '', // Campo específico: Fecha del reporte
-    fechaIngreso: '', // Campo específico: Fecha de ingreso
+    fechaReporte: '',
+    fechaIngreso: '',
     archivo: null
   };
 
@@ -39,21 +40,35 @@ export class EmbarazoComponent {
     { valor: 'sofia', texto: 'sofia' }
   ];
 
-  cargos = [
-    'ACCOUNT EXECUTIVE', 'Administrador Operativo de Infraestructura', 'AGENTE',
-    'AGENTE BACKUP', 'ANALISTA CONTABLE', 'COORDINADOR', 'GERENTE GENERAL',
-    'LIDER DE SALUD Y SEGURIDAD EN EL TRABAJO', 'TEAM LEADER'
-    // ... Agrega aquí el resto de la lista completa si lo necesitas ...
-  ];
+  // 3. Inicializamos el array vacío. Ya no escribimos la lista manual aquí.
+  cargos: string[] = [];
 
   campanias = [
     'Anla', 'Ant', 'ARN', 'Banco de La Republica', 'Dissan Ibagué',
     'Fedex', 'Feel', 'Gerencia General', 'Gerencia Operaciones',
     'Ministerio del interior', 'SIC', 'Uariv'
-    // ... Agrega aquí el resto de áreas completas si lo necesitas ...
   ];
 
   constructor(private router: Router, private solicitudesService: SolicitudesService) { }
+
+  // 4. Agregamos el ciclo de vida ngOnInit para cargar los datos al iniciar
+  ngOnInit(): void {
+    this.cargarCargos();
+  }
+
+  // Método auxiliar para llamar al servicio
+  cargarCargos() {
+    this.solicitudesService.obtenerCargos().subscribe({
+      next: (datos) => {
+        this.cargos = datos; // Llenamos el array con lo que viene de la BD
+      },
+      error: (err) => {
+        console.error('Error cargando cargos:', err);
+        // Opcional: Si falla, podrías cargar una lista por defecto aquí para que no quede vacío
+        // this.cargos = ['Error al cargar', 'Consulte al admin'];
+      }
+    });
+  }
 
   // Método para capturar el archivo
   onFileSelected(event: any) {
@@ -70,7 +85,7 @@ export class EmbarazoComponent {
       next: (res: any) => {
         console.log("Respuesta del servidor:", res);
         alert('Reporte de embarazo enviado a Talento Humano/SSO');
-        this.router.navigate(['/nomina']); // Ajusta la ruta
+        this.router.navigate(['/nomina']);
       },
       error: (err) => {
         console.error('Error al enviar', err);
@@ -94,6 +109,6 @@ export class EmbarazoComponent {
       fechaIngreso: '',
       archivo: null
     };
-    this.router.navigate(['/nomina']);
+    this.router.navigate(['/seguridad']);
   }
 }

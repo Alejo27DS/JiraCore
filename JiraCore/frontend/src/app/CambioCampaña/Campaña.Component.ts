@@ -67,6 +67,6 @@ export class CampañaComponent {
       observaciones: '',
       documento: null
     };
-    this.router.navigate(['/nomina']);
+    this.router.navigate(['/dashboard']);
   }
 }

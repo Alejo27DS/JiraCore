@@ -1,39 +1,56 @@
 <div class="wireframe-container" style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; width: 100% !important; height: 100vh !important; min-width: 1000px !important; background: white;">
 
-  <!-- SIDEBAR: SOLO se muestra si isLoggedIn es TRUE -->
-  <div class="sidebar" *ngIf="isLoggedIn">
+  <!-- CAMBIO: Ocultar Sidebar si es RRHH O Tecnología -->
+  <div class="sidebar" *ngIf="authService.isLoggedIn && !isRrhhPage && !isTecnologiaPage">
     <div class="sidebar-header">BPM SYSTEM</div>
 
-    <a routerLink="admin-panel" *ngIf="isAdmin" class="menu-item" style="background: #333; color: yellow; font-weight: bold;">
+    <a routerLink="dashboard" routerLinkActive="active" class="menu-item">Dashboard</a>
+
+    <!-- Solo Admin -->
+    <a routerLink="admin-panel" *ngIf="authService.isAdmin" class="menu-item" style="background: #333; color: yellow; font-weight: bold;">
       📋 Aprobaciones Pendientes (Admin)
     </a>
 
-    <a routerLink="dashboard" routerLinkActive="active" class="menu-item">Dashboard</a>
-    <a routerLink="nomina" routerLinkActive="active" class="menu-item">Nomina</a>
-    <a routerLink="solicitudes" routerLinkActive="active" class="menu-item">Solicitudes</a>
-    <a routerLink="retiro" routerLinkActive="active" class="menu-item">Retiro</a>
-    <a routerLink="campaña" routerLinkActive="active" class="menu-item">Cambio de Campaña</a>
-    <a routerLink="sst" routerLinkActive="active" class="menu-item">Citas SST</a>
-    <a routerLink="seguridad" routerLinkActive="active" class="menu-item">Seguridad y Salud</a>
+    <!-- Solo RRHH (Solo visible si es RRHH) -->
+    <a routerLink="rrhh-panel" *ngIf="authService.isRrhh" class="menu-item" style="background: #0056b3; color: white; font-weight: bold;">
+      📁 Gestión RRHH (Aprobadas)
+    </a>
+
+    <!-- Solo Tecnología (Solo visible si es Tecnología) -->
+    <a routerLink="tecnologia" *ngIf="authService.isTecnologia" class="menu-item" style="background: #6610f2; color: white; font-weight: bold;">
+      💻 Gestión Tecnología
+    </a>
+
+    <!-- Usuarios Normales -->
+    <a routerLink="nomina" routerLinkActive="active" class="menu-item" *ngIf="!authService.isAdmin && !authService.isRrhh && !authService.isTecnologia">Nomina</a>
+    <a routerLink="solicitudes" routerLinkActive="active" class="menu-item" *ngIf="!authService.isAdmin && !authService.isRrhh && !authService.isTecnologia">
+      Ingreso Personal
+    </a>
+    <a routerLink="retiro" routerLinkActive="active" class="menu-item" *ngIf="!authService.isAdmin && !authService.isRrhh && !authService.isTecnologia">
+      Retiro Personal
+    </a>
+    <a routerLink="campaña" routerLinkActive="active" class="menu-item" *ngIf="!authService.isAdmin">Cambio de Campaña</a>
+    <a routerLink="sst" routerLinkActive="active" class="menu-item" *ngIf="!authService.isAdmin">Citas SST</a>
+    <a routerLink="seguridad" routerLinkActive="active" class="menu-item" *ngIf="!authService.isAdmin">Seguridad y Salud</a>
 
     <div style="margin-top: auto; padding: 20px;">
       <a (click)="logout()" class="btn" style="width:100%; text-align:center; display:block;">Cerrar Sesión</a>
     </div>
   </div>
 
-  <!-- MAIN CONTENT: SIEMPRE VISIBLE (Sin *ngIf) -->
-  <div class="main-content">
+  <!-- CAMBIO: Main Content se expande si es RRHH o Tecnología -->
+  <div class="main-content" [class.full-width]="isRrhhPage || isTecnologiaPage">
 
-    <!-- TOP BAR: SOLO se muestra si isLoggedIn es TRUE -->
-    <div class="top-bar" *ngIf="isLoggedIn">
+    <!-- CAMBIO: Top Bar se oculta si es RRHH O Tecnología -->
+    <div class="top-bar" *ngIf="authService.isLoggedIn && !isRrhhPage && !isTecnologiaPage">
       <h3>Bienvenido</h3>
       <a routerLink="notificaciones" routerLinkActive="active" class="menu-item">Alertas</a>
       <div style="font-size: 12px;">Usuario: Admin</div>
     </div>
 
-    <!-- ROUTER OUTLET: SIEMPRE VISIBLE. Aquí carga el Login o el Dashboard -->
-    <router-outlet></router-outlet>
+    <!-- Navbar personalizada se encuentra dentro de los componentes RRHH y Tecnología HTML, por eso no se repite aquí -->
 
+    <router-outlet></router-outlet>
   </div>
 
 </div>
