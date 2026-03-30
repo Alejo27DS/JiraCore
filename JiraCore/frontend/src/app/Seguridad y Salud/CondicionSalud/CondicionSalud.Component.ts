@@ -94,6 +94,6 @@ export class CondicionSaludComponent {
       diagnosticoCondicion: '',
       archivo: null
     };
-    this.router.navigate(['/nomina']);
+    this.router.navigate(['/seguridad']);
   }
 }

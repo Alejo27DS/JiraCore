@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SolicitudesService } from '../services/Solicitudes';
-
+import { SolicitudesService } from '../services/Solicitudes'; // <--- 1. Importar el servicio
 
 @Component({
   selector: 'app-Solicitudes',
@@ -17,7 +16,6 @@ import { SolicitudesService } from '../services/Solicitudes';
 })
 export class SolicitudesComponent {
 
-  // Objeto para guardar los datos (usamos : any para evitar errores de tipos)
   solicitud: any = {
     cedula: '',
     resumen: '',
@@ -26,15 +24,18 @@ export class SolicitudesComponent {
     correoCorporativo: '',
     campanaArea: '',
     jefeInmediato: '',
-    fechaRetiro: '',
+    fechaRetiro: '', // Si este campo no aplica a ingreso, déjalo o quítalo del HTML
     motivoRetiro: '',
     descripcion: '',
-    archivo: null // Aquí guardamos el archivo
+    archivo: null
   };
 
-  constructor(private router: Router) { }
+  // <--- 2. Inyectar el servicio en el constructor
+  constructor(
+    private router: Router,
+    private solicitudesService: SolicitudesService
+  ) { }
 
-  // Método para capturar el archivo
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -44,16 +45,19 @@ export class SolicitudesComponent {
   }
 
   guardarSolicitud() {
-    console.log('Solicitud guardada:', this.solicitud);
-    console.log('Archivo adjunto:', this.solicitud.archivo ? this.solicitud.archivo.name : 'No adjuntado');
-
-    alert(`Solicitud guardada para Cédula: ${this.solicitud.cedula}.`);
-
-    // (Opcional) Lógica para guardar en BD
-    // this.solicitudService.guardar(this.solicitud).subscribe(...);
-
-    // (Opcional) Volver al menú
-    // this.router.navigate(['/nomina']);
+    // <--- 3. Usar el servicio real para enviar al Backend
+    // Pasamos el TIPO como 'Ingreso' para que el Backend lo apruebe automáticamente
+    this.solicitudesService.crearSolicitud('Ingreso', this.solicitud, this.solicitud.archivo).subscribe({
+      next: (res: any) => {
+        console.log("Respuesta del servidor:", res);
+        alert('Solicitud de Ingreso enviada a Talento Humano');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {
@@ -70,6 +74,6 @@ export class SolicitudesComponent {
       descripcion: '',
       archivo: null
     };
-    this.router.navigate(['/nomina']);
+    this.router.navigate(['/dashboard']);
   }
 }
