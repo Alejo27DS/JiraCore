@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using JiraCore.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

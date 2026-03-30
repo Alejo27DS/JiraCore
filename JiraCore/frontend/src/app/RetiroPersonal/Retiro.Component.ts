@@ -45,17 +45,31 @@ export class RetiroComponent {
   }
 
   guardarRetiro() {
-    // <--- 3. Usar el servicio real enviando 'Retiro' como tipo
-    this.solicitudesService.crearSolicitud('Retiro', this.retiro, this.retiro.archivo).subscribe({
-      next: (res: any) => {
-        console.log("Respuesta del servidor:", res);
-        alert('Solicitud de Retiro enviada a Talento Humano');
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        console.error('Error al enviar', err);
-        alert('Error de conexión');
+    if (!this.retiro.archivo) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('tipoSolicitud', 'Retiro');
+
+    Object.keys(this.retiro).forEach(key => {
+      if (key !== 'archivo' && this.retiro[key]) {
+        formData.append(key, this.retiro[key]);
       }
+    });
+
+    if (this.retiro.archivo) {
+      formData.append('documento', this.retiro.archivo);
+    }
+
+    this.solicitudesService.crearSolicitud(formData).subscribe({
+      next: (res: any) => {
+        alert('Solicitud enviada');
+        this.limpiarFormulario();
+        this.router.navigate(['/retiro']);
+      },
+      error: (err: any) => { console.error(err); alert('Error'); }
     });
   }
 
@@ -74,5 +88,24 @@ export class RetiroComponent {
       archivo: null
     };
     this.router.navigate(['/dashboard']);
+  }
+
+    private limpiarFormulario() {
+    this.retiro = {
+      cedula: '',
+      resumen: '',
+      cargo: '',
+      campanaArea: '',
+      jefeInmediato: '',
+      fechaRetiro: '',
+      motivoRetiro: '',
+      descripcion: '',
+      archivo: null 
+      // NOTA: Si en tu objeto usas 'documento' en lugar de 'archivo', cámbialo aquí también.
+    };
+
+    // Limpiar el input file visualmente
+    const fileInput = document.getElementById('documento') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   }
 }

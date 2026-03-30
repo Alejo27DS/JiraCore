@@ -16,28 +16,64 @@ import { SolicitudesService } from '../../services/Solicitudes';
 })
 export class AjustesNominaComponent {
 
-  // Objeto con los nombres LIMPIOS que coinciden con el HTML
-  ajuste: any= {
+  // Objeto con los datos + la propiedad para el archivo
+  ajuste: any = {
     generador: '',
     resumen: '',
     cedula: '',
     nombre: '',
     cargo: '',
     campanaArea: '',
-    descripcion: ''
+    descripcion: '',
+    documento: null // Agregado para guardar el archivo seleccionado
   };
 
   constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
+  // Método para capturar el archivo
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.ajuste.documento = file;
+      console.log('Archivo seleccionado:', file.name);
+    }
+  }
+
   guardarAjuste() {
-    // Usamos el servicio genérico
-    this.solicitudesService.crearSolicitud('Ajustes de Nómina', this.ajuste).subscribe({
+    // Validación simple
+    if (!this.ajuste.documento) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    // 1. Construimos el FormData
+    const formData = new FormData();
+
+    // Identificador del tipo de solicitud
+    formData.append('tipoSolicitud', 'Ajustes de Nómina');
+
+    // Recorremos el objeto y agregamos los campos
+    Object.keys(this.ajuste).forEach(key => {
+      if (key !== 'documento' && this.ajuste[key]) {
+        formData.append(key, this.ajuste[key]);
+      }
+    });
+
+    // Agregamos el archivo explícitamente
+    if (this.ajuste.documento) {
+      formData.append('documento', this.ajuste.documento);
+    }
+
+    // 2. Enviamos al servicio (1 solo argumento)
+    this.solicitudesService.crearSolicitud(formData).subscribe({
       next: (res: any) => {
-        console.error("Respuesta del servidor:", res)
+        console.log("Respuesta del servidor:", res);
         alert('Solicitud enviada a Administración/RRHH');
+        this.limpiarFormulario();
         this.router.navigate(['/nomina']);
       },
-      error: (err) => {
+      // Agregamos :any al error
+      error: (err: any) => {
         console.error('Error al enviar', err);
         alert('Error de conexión');
       }
@@ -45,6 +81,14 @@ export class AjustesNominaComponent {
   }
 
   cancelar() {
+    if(confirm('¿Estás seguro de cancelar?')) {
+      this.limpiarFormulario();
+      this.router.navigate(['/nomina']);
+    }
+  }
+
+  // Método para limpiar formulario y resetear el input file
+  private limpiarFormulario() {
     this.ajuste = {
       generador: '',
       resumen: '',
@@ -52,8 +96,11 @@ export class AjustesNominaComponent {
       nombre: '',
       cargo: '',
       campanaArea: '',
-      descripcion: ''
+      descripcion: '',
+      documento: null
     };
-    this.router.navigate(['/nomina']);
+    
+    const fileInput = document.getElementById('documento') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   }
 }

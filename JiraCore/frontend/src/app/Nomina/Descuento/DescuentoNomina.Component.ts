@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SolicitudesService } from '../../services/Solicitudes';
 
-
 @Component({
   selector: 'app-Descuento',
   standalone: true,
@@ -18,6 +17,7 @@ import { SolicitudesService } from '../../services/Solicitudes';
 export class DescuentoNominaComponent {
 
   // Objeto para guardar los datos
+  // Cambié 'archivo' por 'documento' para coincidir con el Backend
   descuento: any = {
     generador: '',
     resumen: '',
@@ -27,29 +27,55 @@ export class DescuentoNominaComponent {
     campanaArea: '',
     valorDescuento: 0,
     descripcion: '',
-    archivo: null
+    documento: null 
   };
 
   constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
-  // Método para capturar el archivo cuando el usuario lo selecciona
+  // Método para capturar el archivo
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.descuento.archivo = file;
+      this.descuento.documento = file; // Guardamos en 'documento'
       console.log('Archivo seleccionado:', file.name);
     }
-  };
+  }
 
   guardarDescuento() {
-    // Usamos el servicio genérico
-    this.solicitudesService.crearSolicitud('Descuento de Nomina', this.descuento).subscribe({
+    // Validación simple
+    if (!this.descuento.documento) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    // 1. Construimos el FormData
+    const formData = new FormData();
+
+    // Identificador del tipo de solicitud
+    formData.append('tipoSolicitud', 'Descuento de Nómina');
+
+    // Recorremos el objeto y agregamos los campos
+    Object.keys(this.descuento).forEach(key => {
+      if (key !== 'documento' && this.descuento[key] !== null && this.descuento[key] !== undefined) {
+        formData.append(key, this.descuento[key]);
+      }
+    });
+
+    // Agregamos el archivo explícitamente
+    if (this.descuento.documento) {
+      formData.append('documento', this.descuento.documento);
+    }
+
+    // 2. Enviamos al servicio (1 solo argumento)
+    this.solicitudesService.crearSolicitud(formData).subscribe({
       next: (res: any) => {
-        console.error("Respuesta del servidor:", res)
+        console.log("Respuesta del servidor:", res);
         alert('Solicitud enviada a Administración/RRHH');
+        this.limpiarFormulario();
         this.router.navigate(['/nomina']);
       },
-      error: (err) => {
+      // Agregamos :any al error
+      error: (err: any) => {
         console.error('Error al enviar', err);
         alert('Error de conexión');
       }
@@ -57,6 +83,14 @@ export class DescuentoNominaComponent {
   }
 
   cancelar() {
+    if(confirm('¿Estás seguro de cancelar?')) {
+      this.limpiarFormulario();
+      this.router.navigate(['/nomina']);
+    }
+  }
+
+  // Método para limpiar
+  private limpiarFormulario() {
     this.descuento = {
       generador: '',
       resumen: '',
@@ -66,8 +100,10 @@ export class DescuentoNominaComponent {
       campanaArea: '',
       valorDescuento: 0,
       descripcion: '',
-      archivo: null
+      documento: null
     };
-    this.router.navigate(['/nomina']);
+
+    const fileInput = document.getElementById('documento') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   }
 }

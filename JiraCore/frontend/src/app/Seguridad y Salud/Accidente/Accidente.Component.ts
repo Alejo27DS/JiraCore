@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importante para [(ngModel)]
-import { SolicitudesService } from '../../services/Solicitudes'; // Asegúrate de la ruta correcta
+import { FormsModule } from '@angular/forms';
+import { SolicitudesService } from '../../services/Solicitudes';
 
 @Component({
-  selector: 'app-Accidentes',
+  selector: 'app-Accidente',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,22 +16,20 @@ import { SolicitudesService } from '../../services/Solicitudes'; // Asegúrate d
 })
 export class AccidenteComponent {
 
-  // Objeto para guardar los datos (Estructura similar a tu ejemplo de Descuento)
+  // Objeto para guardar los datos
   accidente: any = {
-    solicitanteEnNombreDe: '',
+    generador: '',
     resumen: '',
     cedula: '',
     nombre: '',
     cargo: '',
-    campaniaArea: '',
-    numeroContacto: '',
+    campanaArea: '',
     fechaAccidente: '',
-    correoCorporativo: '',
-    descripcionHechos: '',
-    archivo: null
+    descripcion: '',
+    documento: null
   };
 
-  // Listas para los selects (para no llenar el HTML de opciones)
+  // --- LISTAS FALTANTES PARA EL HTML ---
   solicitantes = [
     { valor: 'pepito perez', texto: 'pepito' },
     { valor: 'juan', texto: 'juan' },
@@ -39,42 +37,54 @@ export class AccidenteComponent {
     { valor: 'sofia', texto: 'sofia' }
   ];
 
-  // Lista de cargos (recortada por brevedad, agrega todos los que tenías)
   cargos = [
     'ACCOUNT EXECUTIVE', 'Administrador Operativo de Infraestructura', 'AGENTE',
     'AGENTE BACKUP', 'ANALISTA CONTABLE', 'COORDINADOR', 'GERENTE GENERAL',
     'LIDER DE SALUD Y SEGURIDAD EN EL TRABAJO', 'TEAM LEADER'
-    // ... Agrega aquí el resto de cargos de tu lista original ...
   ];
 
-  // Lista de campañas/áreas
   campanias = [
     'Anla', 'Ant', 'ARN', 'Banco de La Republica', 'Dissan Ibagué',
     'Fedex', 'Feel', 'Gerencia General', 'Gerencia Operaciones',
     'Ministerio del interior', 'SIC', 'Uariv'
-    // ... Agrega aquí el resto de áreas de tu lista original ...
   ];
+  // -------------------------------------
 
   constructor(private router: Router, private solicitudesService: SolicitudesService) { }
 
-  // Método para capturar el archivo
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.accidente.archivo = file;
-      console.log('Archivo seleccionado:', file.name);
+      this.accidente.documento = file;
     }
-  };
+  }
 
   guardarAccidente() {
-    // Usamos el servicio genérico igual que en tu ejemplo
-    this.solicitudesService.crearSolicitud('Accidente de Trabajo', this.accidente).subscribe({
+    if (!this.accidente.documento) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('tipoSolicitud', 'Accidente de Trabajo');
+
+    Object.keys(this.accidente).forEach(key => {
+      if (key !== 'documento' && this.accidente[key] !== null && this.accidente[key] !== undefined) {
+        formData.append(key, this.accidente[key]);
+      }
+    });
+
+    if (this.accidente.documento) {
+      formData.append('documento', this.accidente.documento);
+    }
+
+    this.solicitudesService.crearSolicitud(formData).subscribe({
       next: (res: any) => {
-        console.log("Respuesta del servidor:", res);
-        alert('Solicitud de Accidente enviada a Seguridad/SST');
-        this.router.navigate(['/nomina']); // Ajusta la ruta si es diferente
+        alert('Solicitud de Accidente enviada a RRHH');
+        this.limpiarFormulario();
+        this.router.navigate(['/seguridad']);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al enviar', err);
         alert('Error de conexión');
       }
@@ -82,19 +92,23 @@ export class AccidenteComponent {
   }
 
   cancelar() {
-    // Reseteamos el objeto
+    if(confirm('¿Estás seguro de cancelar?')) {
+      this.limpiarFormulario();
+      this.router.navigate(['/seguridad']);
+    }
+  }
+
+  private limpiarFormulario() {
     this.accidente = {
-      solicitanteEnNombreDe: '',
+      generador: '',
       resumen: '',
       cedula: '',
       nombre: '',
       cargo: '',
-      campaniaArea: '',
-      numeroContacto: '',
+      campanaArea: '',
       fechaAccidente: '',
-      correoCorporativo: '',
-      descripcionHechos: '',
-      archivo: null
+      descripcion: '',
+      documento: null
     };
     this.router.navigate(['/seguridad']);
   }

@@ -25,13 +25,13 @@ export class CondicionSaludComponent {
     cargo: '',
     campaniaArea: '',
     numeroContacto: '',
-    fechaTentativaIngreso: '', // Campo específico
+    fechaTentativaIngreso: '',
     correoCorporativo: '',
-    diagnosticoCondicion: '', // Campo específico
-    archivo: null
+    diagnosticoCondicion: '',
+    documento: null // Cambiado de 'archivo' a 'documento'
   };
 
-  // Listas para los selects (Mismas que en el ejemplo anterior)
+  // Listas para los selects
   solicitantes = [
     { valor: 'pepito perez', texto: 'pepito' },
     { valor: 'juan', texto: 'juan' },
@@ -43,14 +43,12 @@ export class CondicionSaludComponent {
     'ACCOUNT EXECUTIVE', 'Administrador Operativo de Infraestructura', 'AGENTE',
     'AGENTE BACKUP', 'ANALISTA CONTABLE', 'COORDINADOR', 'GERENTE GENERAL',
     'LIDER DE SALUD Y SEGURIDAD EN EL TRABAJO', 'TEAM LEADER'
-    // ... Agrega aquí el resto de cargos completos si lo necesitas ...
   ];
 
   campanias = [
     'Anla', 'Ant', 'ARN', 'Banco de La Republica', 'Dissan Ibagué',
     'Fedex', 'Feel', 'Gerencia General', 'Gerencia Operaciones',
     'Ministerio del interior', 'SIC', 'Uariv'
-    // ... Agrega aquí el resto de áreas completas si lo necesitas ...
   ];
 
   constructor(private router: Router, private solicitudesService: SolicitudesService) { }
@@ -59,20 +57,44 @@ export class CondicionSaludComponent {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.condicion.archivo = file;
-      console.log('Archivo seleccionado:', file.name);
+      this.condicion.documento = file;
     }
-  };
+  }
 
   guardarCondicion() {
-    // Usamos el servicio genérico
-    this.solicitudesService.crearSolicitud('Condicion Especial de Salud', this.condicion).subscribe({
+    // Validación de archivo
+    if (!this.condicion.documento) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    // 1. Construimos el FormData
+    const formData = new FormData();
+
+    // Identificador del tipo de solicitud
+    formData.append('tipoSolicitud', 'Condicion Especial de Salud');
+
+    // Recorremos el objeto y agregamos los campos
+    Object.keys(this.condicion).forEach(key => {
+      if (key !== 'documento' && this.condicion[key] !== null && this.condicion[key] !== undefined) {
+        formData.append(key, this.condicion[key]);
+      }
+    });
+
+    // Agregamos el archivo explícitamente
+    if (this.condicion.documento) {
+      formData.append('documento', this.condicion.documento);
+    }
+
+    // 2. Enviamos al servicio (1 solo argumento)
+    this.solicitudesService.crearSolicitud(formData).subscribe({
       next: (res: any) => {
-        console.log("Respuesta del servidor:", res);
         alert('Solicitud de Condición Especial enviada a Talento Humano/SSO');
-        this.router.navigate(['/nomina']); // Ajusta la ruta
+        this.limpiarFormulario();
+        this.router.navigate(['/nomina']);
       },
-      error: (err) => {
+      // Agregamos :any al error
+      error: (err: any) => {
         console.error('Error al enviar', err);
         alert('Error de conexión');
       }
@@ -80,7 +102,14 @@ export class CondicionSaludComponent {
   }
 
   cancelar() {
-    // Reseteamos el objeto
+    if(confirm('¿Estás seguro de cancelar?')) {
+      this.limpiarFormulario();
+      this.router.navigate(['/nomina']);
+    }
+  }
+
+  // Método para limpiar
+  private limpiarFormulario() {
     this.condicion = {
       solicitanteEnNombreDe: '',
       resumen: '',
@@ -92,7 +121,7 @@ export class CondicionSaludComponent {
       fechaTentativaIngreso: '',
       correoCorporativo: '',
       diagnosticoCondicion: '',
-      archivo: null
+      documento: null
     };
     this.router.navigate(['/seguridad']);
   }
