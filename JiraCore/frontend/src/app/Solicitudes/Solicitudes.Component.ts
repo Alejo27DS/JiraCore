@@ -1,24 +1,22 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { SolicitudesService } from '../services/Solicitudes'; // <--- 1. Importar el servicio
 
 @Component({
-  selector: 'app-solicitudes',
+  selector: 'app-Solicitudes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './solicitudes.component.html', // Asegúrate que este archivo sea el correcto
-  styleUrls: ['./Solicitudes.Component.css'] // Usa el nombre exacto que te pide el warning
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  templateUrl: './Solicitudes.Component.html',
+  styleUrl: './Solicitudes.Component.css',
 })
 export class SolicitudesComponent {
 
-  private http = inject(HttpClient);
-  private router = inject(Router);
-
-  // --- ESTA ES LA PROPIEDAD QUE FALTABA ---
-  solicitud = {
+  solicitud: any = {
     cedula: '',
     resumen: '',
     fechaInforme: '',
@@ -26,60 +24,56 @@ export class SolicitudesComponent {
     correoCorporativo: '',
     campanaArea: '',
     jefeInmediato: '',
-    fechaRetiro: '',
+    fechaRetiro: '', // Si este campo no aplica a ingreso, déjalo o quítalo del HTML
     motivoRetiro: '',
-    descripcion: ''
+    descripcion: '',
+    archivo: null
   };
 
-  archivoSeleccionado: File | null = null;
-
-  // --- ESTE MÉTODO FALTABA ---
-  guardarSolicitud() {
-    if (!this.archivoSeleccionado) {
-      alert('Por favor adjunte el documento.');
-      return;
-    }
-
-    const formData = new FormData();
-    Object.keys(this.solicitud).forEach(key => {
-      formData.append(key, (this.solicitud as any)[key]);
-    });
-    formData.append('documento', this.archivoSeleccionado);
-
-    // Ajusta la URL a tu backend
-    this.http.post('https://localhost:7015/api/solicitudes', formData).subscribe({
-      next: (res) => {
-        alert('Solicitud guardada con éxito');
-        this.limpiarFormulario();
-      },
-      error: (err: any) => {
-        console.error(err);
-        alert('Error al guardar');
-      }
-    });
-  }
+  // <--- 2. Inyectar el servicio en el constructor
+  constructor(
+    private router: Router,
+    private solicitudesService: SolicitudesService
+  ) { }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.archivoSeleccionado = file;
+      this.solicitud.archivo = file;
+      console.log('Archivo seleccionado:', file.name);
     }
+  }
+
+  guardarSolicitud() {
+    // <--- 3. Usar el servicio real para enviar al Backend
+    // Pasamos el TIPO como 'Ingreso' para que el Backend lo apruebe automáticamente
+    this.solicitudesService.crearSolicitud('Ingreso', this.solicitud, this.solicitud.archivo).subscribe({
+      next: (res: any) => {
+        console.log("Respuesta del servidor:", res);
+        alert('Solicitud de Ingreso enviada a Talento Humano');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Error al enviar', err);
+        alert('Error de conexión');
+      }
+    });
   }
 
   cancelar() {
-    if(confirm('¿Cancelar?')) {
-      this.router.navigate(['/dashboard']);
-    }
-  }
-
-  private limpiarFormulario() {
     this.solicitud = {
-      cedula: '', resumen: '', fechaInforme: '', cargo: '',
-      correoCorporativo: '', campanaArea: '', jefeInmediato: '',
-      fechaRetiro: '', motivoRetiro: '', descripcion: ''
+      cedula: '',
+      resumen: '',
+      fechaInforme: '',
+      cargo: '',
+      correoCorporativo: '',
+      campanaArea: '',
+      jefeInmediato: '',
+      fechaRetiro: '',
+      motivoRetiro: '',
+      descripcion: '',
+      archivo: null
     };
-    this.archivoSeleccionado = null;
-    const fileInput = document.getElementById('documento') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    this.router.navigate(['/dashboard']);
   }
 }

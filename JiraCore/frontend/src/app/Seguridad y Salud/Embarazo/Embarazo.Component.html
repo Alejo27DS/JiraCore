@@ -23,27 +23,97 @@
     <label for="nombre">Nombre</label>
     <input type="text" id="nombre" name="nombre" [(ngModel)]="reporte.nombre" required />
 
-    <label for="cargo" class="form-label">Cargo</label>
-    <select id="cargo"
-            name="cargo"
-            class="form-select sst-select"
-            [(ngModel)]="reporte.cargo"
-            required>
-      <option value="" selected disabled>Seleccione un cargo</option>
-      @for (cargo of cargos; track cargo) {
-      <option>{{ cargo }}</option>
-      }
+    <label for="cargo">Cargo:</label>
+    <select id="cargo" name="cargo" [(ngModel)]="reporte.cargo" required>
+      <option>ACCOUNT EXECUTIVE</option>
+      <option>Administrador Operativo de Infraestructura</option>
+      <option>AGENTE</option>
+      <option>AGENTE BACKUP</option>
+      <option>AGENTE BACKUP PROFESIONAL</option>
+      <option>AGENTE BILINGÜE</option>
+      <option>AGENTE GENERAL</option>
+      <option>AGENTE GENERAL LENGUA DE SEÑAS</option>
+      <option>AGENTE PROFESIONAL</option>
+      <option>Agente Profesional Lengua de señas</option>
+      <option>AGENTE PROFESIONAL MINERO DE DATOS</option>
+      <option>AGENTE PROFESIONAL_PSICOSOCIAL</option>
+      <option>AGENTE TECNICO</option>
+      <option>AGENTE TECNICO LENGUA DE SEÑAS</option>
+      <option>Agente_tecnico_para_direccion_de_riesgos_laborales</option>
+      <option>ANALISTA CONTABLE</option>
+      <option>ANALISTA DE CALIDAD Y PROCESOS</option>
+      <option>ANALISTA DE TALENTO HUMANO</option>
+      <option>ANALISTA SOPORTE 1</option>
+      <option>APRENDIZ LECTIVA</option>
+      <option>APRENDIZ PRODUCTIVA</option>
+      <option>APRENDIZ UNIVERSITARIO</option>
+      <option>Arquitecto de infraestructura en telecomunicaciones</option>
+      <option>AUXILIAR DE MANTENIMIENTO Y MENSAJERIA</option>
+      <option>AUXILIAR DE SERVICIOS GENERALES</option>
+      <option>Bilingual training</option>
+      <option>COORDINADOR</option>
+      <option>Coordinador de Mesa de Servicio y Soporte TI</option>
+      <option>COORDINADOR NACIONAL</option>
+      <option>DESARROLLADOR JUNIOR</option>
+      <option>Director de Desarrollo de Software</option>
+      <option>FORMADOR</option>
+      <option>GERENTE ADMINISTRATIVO Y FINANCIERO</option>
+      <option>GERENTE DE CONTROL MEJORA E INNOVACION</option>
+      <option>GERENTE DE INFRAESTRUCTURA Y TECNOLOGIA</option>
+      <option>GERENTE DE MERCADEO Y VENTAS</option>
+      <option>GERENTE DE OPERACIONES</option>
+      <option>GERENTE DE PROYECTO</option>
+      <option>GERENTE DE TALENTO HUMANO Y CULTURA</option>
+      <option>GERENTE GENERAL</option>
+      <option>Ingeniero de Soluciones de Inteligencia Artificial</option>
+      <option>Level 1 Support Analyst</option>
+      <option>LIDER ADMINISTRATIVO Y FINANCIERO</option>
+      <option>LIDER DE ATRACCION Y SELECCIÓN DEL TALENTO</option>
+      <option>LIDER DE CALIDAD</option>
+      <option>LIDER DE FORMACION Y BIENESTAR</option>
+      <option>LIDER DE NOMINA Y NOVEDADES DE TALENTO HUMANO</option>
+      <option>LIDER DE SALUD Y SEGURIDAD EN EL TRABAJO</option>
+      <option>LIDER MARKETING DIGITAL</option>
+      <option>MINERO DE DATOS</option>
+      <option>PROFESIONAL DE TALENTO HUMANO BILINGUE</option>
+      <option>PROFESIONAL ZONAL EN CAMPO</option>
+      <option>RECEPCIONISTA</option>
+      <option>Sales Representative</option>
+      <option>SUBGERENTE GENERAL</option>
+      <option>SUPERVISOR</option>
+      <option>SUPERVISOR DE OPERACIONES FEEL / ELP</option>
+      <option>TEAM LEADER</option>
+      <option>TEAM LEADER JUNIOR</option>
     </select>
 
-    <label for="campania">Campaña o Áreas:</label>
-    <select id="campania"
-            name="campaniaArea"
-            [(ngModel)]="reporte.campaniaArea"
-            required>
+    <label for="campanaArea">Campaña o Áreas:</label>
+    <select id="campanaArea" name="campanaArea" [(ngModel)]="reporte.campanaArea">
       <option value="" disabled selected>Seleccione una opción...</option>
-      @for (camp of campanias; track camp) {
-      <option [ngValue]="camp">{{ camp }}</option>
-      }
+      <option value="Anla">Anla</option>
+      <option value="Ant">Ant</option>
+      <option value="ARN">ARN</option>
+      <option value="Banco de La Republica">Banco de La Republica</option>
+      <option value="Dissan Ibagué">Dissan Ibagué</option>
+      <option value="Dissan Risaralda">Dissan Risaralda</option>
+      <option value="Fedex">Fedex</option>
+      <option value="Feel">Feel</option>
+      <option value="Gerencia Control y Mejora">Gerencia Control y Mejora</option>
+      <option value="Gerencia Financiera y Administrativa">Gerencia Financiera y Administrativa</option>
+      <option value="Gerencia General">Gerencia General</option>
+      <option value="Gerencia Operaciones">Gerencia Operaciones</option>
+      <option value="Gerencia Recursos Humanos">Gerencia Recursos Humanos</option>
+      <option value="Gerencia Tecnologia">Gerencia Tecnologia</option>
+      <option value="Minigualdad">Minigualdad</option>
+      <option value="Ministerio del interior">Ministerio del interior</option>
+      <option value="Movilidad">Movilidad</option>
+      <option value="Opain">Opain</option>
+      <option value="Preppas">Preppas</option>
+      <option value="Rubicón">Rubicón</option>
+      <option value="Sanida Costa">Sanida Costa</option>
+      <option value="SIC">SIC</option>
+      <option value="Supersociedades empresarial">Supersociedades empresarial</option>
+      <option value="Uariv">Uariv</option>
+      <option value="Universidad Militar">Universidad Militar</option>
     </select>
 
     <label for="numeroContacto">Numero de contacto</label>

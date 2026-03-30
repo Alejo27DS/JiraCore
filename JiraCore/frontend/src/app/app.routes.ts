@@ -16,6 +16,8 @@ import { EmbarazoComponent } from './Seguridad y Salud/Embarazo/Embarazo.Compone
 import { AccidenteComponent } from './Seguridad y Salud/Accidente/Accidente.Component';
 import { CondicionSaludComponent } from './Seguridad y Salud/CondicionSalud/CondicionSalud.Component';
 import { AdminPanelComponent } from './Admin/AdminPanel.Component';
+import { RrhhPanelComponent } from './RRHH/RrhhPanel.Component';
+import { TecnologiaComponent } from './TIC/TecnologiaComponent';
 
 
 
@@ -37,5 +39,7 @@ export const routes: Routes = [
   { path: 'seguridad/condicion-especial', component: CondicionSaludComponent },
   { path: 'seguridad/accidente', component: AccidenteComponent },
   { path: 'admin-panel', component: AdminPanelComponent },
+  { path: 'rrhh-panel', component: RrhhPanelComponent },
+  { path: 'tecnologia', component: TecnologiaComponent },
 
 ];

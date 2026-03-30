@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, Router, NavigationEnd} from '@angular/router'; 
-import { NgIf } from '@angular/common';
+import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './Login/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { NgIf } from '@angular/common';
   imports: [
     RouterOutlet,
     RouterLink,
-    NgIf
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -16,36 +17,23 @@ import { NgIf } from '@angular/common';
 export class AppComponent {
   title = 'bpm-wireframe';
 
-  isLoggedIn: boolean = false;
-  isAdmin: boolean = false; // Aquí podrías implementar una lógica real para determinar si el usuario es admin
+  // Aquí inyectamos el Router
+  constructor(
+    private router: Router,
+    public authService: AuthService
+  ) { }
 
-  constructor(private router: Router) {
-    // 1. Estado inicial
-    if (typeof window !== 'undefined') {
-      this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
-    }
-
-    this.router.events.subscribe((event) => {
-      // Solo reaccionamos cuando la navegación termina completamente
-      if (event instanceof NavigationEnd) {
-    
-        if (typeof window !== 'undefined') {
-          this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
-        }
-      }
-    });
+  // --- ESTO ESTÁ DENTRO DE LA CLASE ---
+  // Este getter detecta si la URL incluye rrhh-panel
+  get isRrhhPage(): boolean {
+    return this.router.url.includes('/rrhh-panel');
+  }
+  get isTecnologiaPage(): boolean {
+    return this.router.url.includes('/tecnologia');
   }
 
   logout() {
-    // 1. Borramos la sesión
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('isLoggedIn');
-    }
-
-    // 2. Actualizamos la variable inmediatamente para que el sidebar desaparezca YA
-    this.isLoggedIn = false;
-
-    // 3. Redirigimos
-    this.router.navigate(['']);
+    this.authService.logout();
+    this.router.navigate([""]);
   }
 }

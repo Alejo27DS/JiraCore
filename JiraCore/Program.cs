@@ -10,19 +10,17 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Angular",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowAngularApp",
+        builder => builder
+            .WithOrigins("https://localhost:4200") 
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
-    // --- INICIO CONEXIÓN MONGODB ---
+// --- INICIO CONEXIÓN MONGODB ---
 
-    // 1. Leemos la cadena de conexión y el nombre de la BD del archivo appsettings.json
-    var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB");
+// 1. Leemos la cadena de conexión y el nombre de la BD del archivo appsettings.json
+var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDB");
     var mongoDatabaseName = builder.Configuration["DatabaseName"];
 
     // 2. Creamos el cliente de MongoDB
@@ -38,7 +36,7 @@ builder.Services.AddCors(options =>
     // --- FIN CONEXIÓN MONGODB ---
 var app = builder.Build();
 
-app.UseCors("Angular");
+app.UseCors("AllowAngularApp");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -53,3 +51,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+        

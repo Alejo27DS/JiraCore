@@ -1,37 +1,42 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './Login/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, NgIf],
+  imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'bpm-wireframe';
-  isLoggedIn: boolean = false;
-  isAdmin: boolean = false;
 
-  constructor(private router: Router) {
-    if (typeof window !== 'undefined') {
-      this.isLoggedIn = !!localStorage.getItem('isLoggedIn');
+  constructor(
+    private router: Router,
+    public authService: AuthService
+  ) { }
 
-      // --- AGREGA ESTA LÓGICA ---
-      const userEmail = localStorage.getItem('UserEmail');
-      if (userEmail === '') {
-        this.isAdmin = true;
-      }
-    }
+  get isRrhhPage(): boolean {
+    return this.router.url.includes('/rrhh-panel');
   }
-  // ... resto del código (logout, etc)
+
+  // --- CORRECCIÓN AQUÍ: Debe buscar 'tecnologia', no 'rrhh-panel' ---
+  get isTecnologiaPage(): boolean {
+    return this.router.url.includes('/tecnologia');
+  }
+  // ------------------------------------------------------------------
+
+  // Getter para verificación de roles (opcional pero recomendado)
+  //get isTecnologia(): boolean {
+  //  const user = this.authService.userSubject.value;
+    // Asegúrate de que tu base de datos devuelve el rol exacto ('Tecnología', 'Tech', etc.)
+  //  return user?.rol === 'Tecnologia';
+ // }
 
   logout() {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("isLoggedIn");
-    }
-
-    this.router.navigate([""]);
+    this.authService.logout();
+    this.router.navigate(['']);
   }
 }

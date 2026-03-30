@@ -101,9 +101,6 @@ export class CampañaComponent {
       observaciones: '',
       documento: null
     };
-
-    // Limpiar el input file visualmente
-    const fileInput = document.getElementById('documento') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    this.router.navigate(['/dashboard']);
   }
 }

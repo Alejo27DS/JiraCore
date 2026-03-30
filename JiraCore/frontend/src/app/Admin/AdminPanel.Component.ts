@@ -19,7 +19,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   cargarSolicitudes() {
-    this.http.get<any[]>('https://localhost:7263/api/solicitudes/pendientes').subscribe(data => {
+    this.http.get<any[]>('https://localhost:7264/api/solicitudes/pendientes').subscribe(data => {
       this.solicitudes = data;
     });
   }

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService {
+export class LoginService {
   // Asegúrate de poner la URL correcta de tu API (usualmente https://localhost:5062/...)
   private apiUrl = 'https://localhost:7264';
 

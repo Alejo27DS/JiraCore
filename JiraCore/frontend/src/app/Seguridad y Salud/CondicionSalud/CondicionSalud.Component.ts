@@ -123,8 +123,6 @@ export class CondicionSaludComponent {
       diagnosticoCondicion: '',
       documento: null
     };
-
-    const fileInput = document.getElementById('documento') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    this.router.navigate(['/seguridad']);
   }
 }
