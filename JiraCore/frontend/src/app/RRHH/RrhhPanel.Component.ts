@@ -29,8 +29,8 @@ export class RrhhPanelComponent implements OnInit {
   estados = ['Pendiente', 'EnProceso', 'Gestionada'];
   tipos = ['Nomina', 'Solicitudes', 'Retiro', 'Campaña', 'SST', 'Seguridad', 'Embarazo', 'Accidente', 'CondicionSalud', 'Ingreso'];
 
+  // Aunque usamos deletedIds para UI optimista, la limpieza principal se hace recargando
   deletedIds: Set<number> = new Set<number>(); 
-
 
   constructor(
     private solicitudesService: SolicitudesService,
@@ -42,31 +42,25 @@ export class RrhhPanelComponent implements OnInit {
     this.cargarDatos();
   }
 
-  // --- MODIFICAR ESTE MÉTODO ---
   cargarDatos() {
-    this.solicitudesService.getBandejaTalentoHumano(
-      this.filtros.q, this.filtros.estado, this.filtros.tipo
-    ).subscribe({
+    // CORRECCIÓN: El servicio definido anteriormente no acepta argumentos
+    // Si necesitas filtros en el futuro, el servicio debe aceptar un objeto { q, estado, tipo }
+    this.solicitudesService.getBandejaTalentoHumano().subscribe({
       next: (response: any) => {
-        // ===========================================
-        // AQUÍ ESTÁ EL TRUCO: Filtramos lo que vino de la BD
-        // para eliminar los que el usuario ya borró de la vista.
-        // ===========================================
-        const solicitudesFiltradas = response.solicitudes.filter((s: any) =>
+        // Si el backend devuelve un array directo, usa 'response'. Si devuelve un objeto { solicitudes: [...] }, usa 'response.solicitudes'.
+        // Asumo la estructura actual del usuario:
+        const lista = response.solicitudes || response; 
+
+        // Filtramos visualmente los borrados
+        const solicitudesFiltradas = lista.filter((s: any) =>
           !this.deletedIds.has(s.id)
         );
 
         this.solicitudes = solicitudesFiltradas;
 
-        // Recalculamos KPIs basados en la lista filtrada
-        this.kpis = {
-          total: this.solicitudes.length,
-          pendientes: this.solicitudes.filter(s => s.estado === 'Pendiente').length,
-          enProceso: this.solicitudes.filter(s => s.estado === 'EnProceso').length,
-          gestionadas: this.solicitudes.filter(s => s.estado === 'Gestionada' || s.estado === 'EnviadoTecnologia').length
-        };
+        this.recalcularKpisLocales();
       },
-      error: (err) => console.error('Error cargando bandeja', err)
+      error: (err: any) => console.error('Error cargando bandeja', err) // Agregado :any
     });
   }
 
@@ -74,37 +68,28 @@ export class RrhhPanelComponent implements OnInit {
     this.cargarDatos();
   }
 
-  // --- ACTUALIZACIÓN INMEDIATA (Optimistic UI) ---
   cambiarEstado(id: number, nuevoEstado: string) {
-    // 1. Buscamos el índice de la solicitud en la lista local
     const index = this.solicitudes.findIndex(s => s.id === id);
 
     if (index !== -1) {
       const estadoAnterior = this.solicitudes[index].estado;
-
-      // 2. Actualizamos el estado en la lista local INMEDIATAMENTE
       this.solicitudes[index].estado = nuevoEstado;
-
-      // 3. Recalculamos los contadores al instante
       this.recalcularKpisLocales();
 
-      // 4. Llamamos al Backend para guardar el cambio real
-      this.solicitudesService.actualizarEstado(id, nuevoEstado).subscribe({
+      // CORRECCIÓN: Convertimos id a String para que coincida con el tipo del servicio
+      this.solicitudesService.actualizarEstado(String(id), nuevoEstado).subscribe({
         next: () => {
-          // Éxito: Ya está actualizado visualmente, no necesitamos hacer nada más.
           console.log('Estado actualizado en DB');
         },
-        error: (err) => {
-          // Si falla la DB, REVERTIMOS el cambio visual (Rollback)
+        error: (err: any) => { // Agregado :any
           this.solicitudes[index].estado = estadoAnterior;
           this.recalcularKpisLocales();
-          alert('Error al guardar el estado en el servidor. Se ha revertido el cambio.');
+          alert('Error al guardar el estado. Se ha revertido el cambio.');
         }
       });
     }
   }
 
-  // Método auxiliar para recalcular los KPIs sin pedir a la BD
   recalcularKpisLocales() {
     this.kpis.total = this.solicitudes.length;
     this.kpis.pendientes = this.solicitudes.filter(s => s.estado === 'Pendiente').length;
@@ -113,36 +98,28 @@ export class RrhhPanelComponent implements OnInit {
   }
 
   eliminarDeVista(id: string) {
-    if (confirm('¿Estás seguro de eliminar esta solicitud de RRHH? (Esto se guardará en la base de datos)')) {
+    if (confirm('¿Estás seguro de eliminar esta solicitud de RRHH?')) {
 
-      // ELIMINAMOS LA LÓGICA ANTIGUA (deletedIds, filter) -----------------
-
-      // 1. Llamamos al servicio para borrar en MongoDB (Soft Delete)
-      this.solicitudesService.eliminarSolicitud(id).subscribe({
+      // CORRECCIÓN: Convertir id a String si el servicio lo pide
+      this.solicitudesService.eliminarSolicitud(String(id)).subscribe({
         next: () => {
-          // 2. Si el backend responde OK, simplemente recargamos los datos
-          // El backend ya no nos enviará el borrado, así que desaparece de la lista
           this.cargarDatos();
         },
-        error: (err) => {
+        error: (err: any) => { // Agregado :any
           console.error(err);
           alert('Error al eliminar la solicitud');
         }
       });
-
-      // -------------------------------------------------------------------
     }
   }
 
   verDetalle(solicitud: any) {
     this.solicitudSeleccionada = solicitud;
 
-    // Si no tiene comentarios, iniciamos la propiedad
     if (!this.solicitudSeleccionada.comentarios) {
       this.solicitudSeleccionada.comentarios = '';
     }
 
-    // Parseamos los datos
     if (typeof solicitud.datos === 'string') {
       try {
         this.solicitudSeleccionada.datosParseados = JSON.parse(solicitud.datos);
@@ -153,24 +130,24 @@ export class RrhhPanelComponent implements OnInit {
     this.mostrarModal = true;
   }
 
-  // En RrhhPanel.component.ts
-
   guardarComentario() {
     const mensaje = (document.getElementById('comentarios') as HTMLTextAreaElement).value;
     if (!mensaje.trim()) return alert('Escribe un comentario');
 
-    // LLAMAMOS AL SERVICIO (En vez de solo alertar)
-    this.solicitudesService.agregarComentario(
-      this.solicitudSeleccionada.id,
-      'RRHH', // Autor es RRHH
-      mensaje
-    ).subscribe({
+    // CORRECCIÓN: Unificar argumentos en un solo objeto
+    this.solicitudesService.agregarComentario({
+      solicitudId: this.solicitudSeleccionada.id,
+      autor: 'RRHH',
+      texto: mensaje
+    }).subscribe({
       next: () => {
-        alert('Comentario enviado a Tecnologia');
-        this.cargarDatos(); // Recargamos para verlo en la lista/comentarios
+        alert('Comentario enviado');
+        this.cargarDatos();
         this.mostrarModal = false;
       },
-      error: () => alert('Error al guardar comentario')
+      error: (err: any) => { // Agregado :any
+        alert('Error al guardar comentario');
+      }
     });
   }
 

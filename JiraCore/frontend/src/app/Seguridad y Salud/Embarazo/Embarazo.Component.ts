@@ -13,7 +13,7 @@ export interface ReporteEmbarazo {
   cedula: string;
   nombre: string;
   cargo: string;
-  campaniaArea: string;
+  campanaArea: string;
   numeroContacto: string;
   correoCorporativo: string;
   fechaReporte: string;
@@ -40,7 +40,7 @@ export class EmbarazoComponent implements OnInit { // <--- Implementa OnInit
     cedula: '',
     nombre: '',
     cargo: '',
-    campaniaArea: '',
+    campanaArea: '',
     numeroContacto: '',
     correoCorporativo: '',
     fechaReporte: '',
@@ -111,7 +111,7 @@ export class EmbarazoComponent implements OnInit { // <--- Implementa OnInit
     formData.append('cedula', this.reporte.cedula);
     formData.append('nombre', this.reporte.nombre);
     formData.append('cargo', this.reporte.cargo);
-    formData.append('campaniaArea', this.reporte.campaniaArea);
+    formData.append('campaniaArea', this.reporte.campanaArea);
     formData.append('numeroContacto', this.reporte.numeroContacto);
     formData.append('correoCorporativo', this.reporte.correoCorporativo);
     formData.append('fechaReporte', this.reporte.fechaReporte);
@@ -155,7 +155,7 @@ export class EmbarazoComponent implements OnInit { // <--- Implementa OnInit
       cedula: '',
       nombre: '',
       cargo: '',
-      campaniaArea: '',
+      campanaArea: '',
       numeroContacto: '',
       correoCorporativo: '',
       fechaReporte: '',

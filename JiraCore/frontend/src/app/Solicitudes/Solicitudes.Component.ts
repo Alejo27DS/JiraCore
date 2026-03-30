@@ -45,22 +45,35 @@ export class SolicitudesComponent {
   }
 
   guardarSolicitud() {
-    // <--- 3. Usar el servicio real para enviar al Backend
-    // Pasamos el TIPO como 'Ingreso' para que el Backend lo apruebe automáticamente
-    this.solicitudesService.crearSolicitud('Ingreso', this.solicitud, this.solicitud.archivo).subscribe({
-      next: (res: any) => {
-        console.log("Respuesta del servidor:", res);
-        alert('Solicitud de Ingreso enviada a Talento Humano');
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        console.error('Error al enviar', err);
-        alert('Error de conexión');
+    if (!this.solicitud.archivo) {
+      alert('Por favor adjunte el documento.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('tipoSolicitud', 'Ingreso');
+
+    Object.keys(this.solicitud).forEach(key => {
+      if (key !== 'archivo' && this.solicitud[key]) {
+        formData.append(key, this.solicitud[key]);
       }
+    });
+
+    if (this.solicitud.archivo) {
+      formData.append('documento', this.solicitud.archivo);
+    }
+
+    this.solicitudesService.crearSolicitud(formData).subscribe({
+      next: (res: any) => {
+        alert('Solicitud enviada');
+        this.limpiarFormulario();
+        this.router.navigate(['/solicitudes']);
+      },
+      error: (err: any) => { console.error(err); alert('Error'); }
     });
   }
 
-  cancelar() {
+  private limpiarFormulario() {
     this.solicitud = {
       cedula: '',
       resumen: '',
@@ -74,6 +87,15 @@ export class SolicitudesComponent {
       descripcion: '',
       archivo: null
     };
-    this.router.navigate(['/dashboard']);
+
+    const fileInput = document.getElementById('documento') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  cancelar() {
+    if(confirm('¿Estás seguro de cancelar? Se perderán los datos.')) {
+      this.limpiarFormulario();
+      this.router.navigate(['/dashboard']);
+    }
   }
 }
